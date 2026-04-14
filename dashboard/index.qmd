@@ -1,41 +1,54 @@
 --- 
-title: "Development Indicators by Continent"
-author: "Gapminder Analytics Group"
+title: "Brecha Digital y Riesgo Educativo en el Sureste"
+author: "Equipo Abejas Astutas"
 format: dashboard
 --- 
 
 ```{python}
+import pandas as pd
 import plotly.express as px
-df = px.data.gapminder()
-```
 
-## Row {height=60%}
+# 1. Datos del Histórico de Abandono (SEP)
+df_lineas = pd.DataFrame({
+    "ciclo_escolar": ["2019-2020", "2020-2021", "2021-2022", "2022-2023", "2023-2024"] * 3,
+    "tasa_abandono_pct": [5.7, 14.8, 8.5, 8.6, 8.7, 7.0, 12.5, 9.0, 8.8, 8.9, 6.2, 13.2, 10.1, 9.5, 9.2],
+    "Estado": ["Chiapas"]*5 + ["Guerrero"]*5 + ["Oaxaca"]*5
+})
 
-```{python}
-#| title: GDP and Life Expectancy 
-px.scatter(  
-  df, x="gdpPercap", y="lifeExp", 
-  animation_frame="year", animation_group="country", 
-  size="pop", color="continent", hover_name="country",
-  facet_col="continent", log_x=True, size_max=45, 
-  range_x=[100,100000], range_y=[25,90] 
-)  
-```
+# 2. Datos de Desconexión (ENDUTIH vs SEP)
+df_scatter = pd.DataFrame({
+    "Estado": ["Chiapas", "Oaxaca", "Guerrero", "Media Nacional"],
+    "Hogares_con_PC_PCT": [16.0, 18.0, 22.0, 45.0],
+    "Tasa_Abandono_Actual": [8.78, 8.65, 8.52, 5.0]
+})
 
-## Row {height=40%}
+# 3. Datos de Pobreza (CONEVAL)
+df_pobreza = pd.DataFrame({
+    "Estado": ["Chiapas", "Guerrero", "Oaxaca"],
+    "Pobreza_Extrema_PCT": [29.3, 25.5, 20.6]
+})
 
-```{python}
-#| title: Population
-px.area(
-  df, x="year", y="pop", 
-  color="continent", line_group="country"
-)
-```
+Row {height=60%}
 
-```{python}
-#| title: Life Expectancy
+#| title: El Impacto de la Pandemia: Abandono Escolar Histórico (2019-2024)
 px.line(
-  df, x="year", y="lifeExp", 
-  color="continent", line_group="country"
+    df_lineas, x="ciclo_escolar", y="tasa_abandono_pct", 
+    color="Estado", markers=True,
+    labels={"tasa_abandono_pct": "Tasa de Abandono (%)", "ciclo_escolar": "Ciclo Escolar"}
 )
-```
+
+Row {height=40%}
+
+#| title: La Raíz del Problema: Desconexión vs Abandono Actual
+px.scatter(
+    df_scatter, x="Hogares_con_PC_PCT", y="Tasa_Abandono_Actual", 
+    color="Estado", size=[4,4,4,6], size_max=15,
+    labels={"Hogares_con_PC_PCT": "% Hogares con PC (ENDUTIH)", "Tasa_Abandono_Actual": "% Abandono Actual (SEP)"}
+)
+
+#| title: Viabilidad de Hardware: Pobreza Extrema en el Suroeste
+px.bar(
+    df_pobreza, x="Estado", y="Pobreza_Extrema_PCT", 
+    color="Estado",
+    labels={"Pobreza_Extrema_PCT": "% Pobreza Extrema (CONEVAL)"}
+)
