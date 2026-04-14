@@ -1,10 +1,10 @@
 CVE_ENT,NOM_ENT,nombre,internet_pct,pobreza_pct,abandono_pct,brecha,lat,lon,nodo
-1,Aguascalientes,Aguascalientes,82.4,27.5,8.75,17.6,22.0,-102.3,0
+1,Aguascalientes,Aguascalientes,82.4,27.5,8.75,17.6,22,-102.3,0
 2,Baja California,Baja California,81.6,23.1,6.66,18.4,30.8,-115.6,0
 3,Baja California Sur,B.C. Sur,80.4,27.4,15.72,19.6,25.1,-111.5,0
 4,Campeche,Campeche,71.5,48.5,9.03,28.5,19.1,-90.4,0
 5,Coahuila de Zaragoza,Coahuila,83.1,23.6,4.68,16.9,27.2,-102.1,0
-6,Colima,Colima,77.1,27.8,9.21,22.9,19.1,-104.0,0
+6,Colima,Colima,77.1,27.8,9.21,22.9,19.1,-104,0
 7,Chiapas,Chiapas,50.7,74.4,8.23,49.3,16.7,-92.9,1
 8,Chihuahua,Chihuahua,77.6,25.5,7.68,22.4,28.6,-106.1,0
 9,Ciudad de MÃ©xico,Ciudad de MÃ©xico,84.4,34.2,9.79,15.6,19.4,-99.1,0
@@ -15,19 +15,19 @@ CVE_ENT,NOM_ENT,nombre,internet_pct,pobreza_pct,abandono_pct,brecha,lat,lon,nodo
 14,Jalisco,Jalisco,80.9,32.6,6.59,19.1,20.7,-103.4,0
 15,MÃ©xico,MÃ©xico,76.7,50.8,10.35,23.3,19.4,-99.7,0
 16,MichoacÃ¡n de Ocampo,MichoacÃ¡n de Ocampo,67.7,45.6,9.32,32.3,19.6,-101.7,0
-17,Morelos,Morelos,74.4,52.6,13.22,25.6,18.7,-99.0,0
-18,Nayarit,Nayarit,66.9,30.5,11.33,33.1,22.0,-105.0,0
+17,Morelos,Morelos,74.4,52.6,13.22,25.6,18.7,-99,0
+18,Nayarit,Nayarit,66.9,30.5,11.33,33.1,22,-105,0
 19,Nuevo LeÃ³n,Nuevo LeÃ³n,83.7,19.7,7.6,16.3,25.6,-99.6,0
 20,Oaxaca,Oaxaca,55.5,63.8,10.7,44.5,17.1,-96.7,1
-21,Puebla,Puebla,61.8,63.4,8.0,38.2,18.9,-97.7,0
-22,QuerÃ©taro,QuerÃ©taro,79.5,32.9,11.85,20.5,20.6,-100.0,0
+21,Puebla,Puebla,61.8,63.4,8,38.2,18.9,-97.7,0
+22,QuerÃ©taro,QuerÃ©taro,79.5,32.9,11.85,20.5,20.6,-100,0
 23,Quintana Roo,Quintana Roo,82.3,44.8,9.86,17.7,19.2,-88.5,0
-24,San Luis PotosÃ­,San Luis PotosÃ­,65.5,44.6,10.64,34.5,22.3,-101.0,0
+24,San Luis PotosÃ­,San Luis PotosÃ­,65.5,44.6,10.64,34.5,22.3,-101,0
 25,Sinaloa,Sinaloa,78.9,28.3,4.79,21.1,24.8,-107.4,0
 26,Sonora,Sonora,84.4,31.2,11.12,15.6,29.3,-110.7,0
-27,Tabasco,Tabasco,71.7,53.0,4.89,28.3,17.8,-92.7,0
+27,Tabasco,Tabasco,71.7,53,4.89,28.3,17.8,-92.7,0
 28,Tamaulipas,Tamaulipas,74.9,35.8,11.39,25.1,24.3,-98.8,0
 29,Tlaxcala,Tlaxcala,61.5,58.3,8.35,38.5,19.3,-98.2,0
-30,Veracruz de Ignacio de la Llave,Veracruz,64.0,60.8,6.7,36.0,19.8,-96.9,1
+30,Veracruz de Ignacio de la Llave,Veracruz,64,60.8,6.7,36,19.8,-96.9,0
 31,YucatÃ¡n,YucatÃ¡n,73.9,47.8,13.06,26.1,20.7,-89.1,0
-32,Zacatecas,Zacatecas,78.2,43.8,11.91,21.8,23.0,-102.5,0
+32,Zacatecas,Zacatecas,78.2,43.8,11.91,21.8,23,-102.5,0

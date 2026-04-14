@@ -1,7 +1,7 @@
 ---
 title: "Desconectados"
-subtitle: "El verdadero costo de estudiar en el suroeste de México · Una crisis de infraestructura (ODS 9) que sentencia el futuro educativo (ODS 4)"
-author: "Abejas Astutas · HackODS UNAM 2026"
+subtitle: "El verdadero costo de estudiar en el suroeste de México · Una crisis de infraestructura que sentencia el futuro educativo "
+author: "Abejas Astutas"
 format:
   dashboard:
     theme:
@@ -103,13 +103,13 @@ dict(icon="wifi", color="info", value=f"{MEDIA_NAC:.1f} %")
 ```{python}
 #| content: valuebox
 #| title: "Brecha rural vs urbana"
-dict(icon="arrows-collapse-vertical", color="warning", value=f"{BRECHA:.1f} pp")
+dict(icon="arrows-collapse-vertical", color="warning", value=f"{BRECHA:.1f} %")
 ```
 
 ### Row {height="84%"}
 
 ```{python}
-#| title: "Brecha digital por estado — República Mexicana  ·  menú ▾ para cambiar indicador"
+#| title: "Brecha digital por estado — República Mexicana "
 
 metricas = [
     ("Sin internet (%)",     "brecha",       "Reds",    "Hogares sin internet"),
@@ -208,29 +208,29 @@ fig_map
 ## Column {width="38%"}
 
 ::: {.callout-important icon=false}
-## Acto I · La Lotería Geográfica
+## La Lotería Geográfica
 
-La geografía sigue dictando **quién tiene derecho a escribir el futuro**. Mientras en el norte el acceso a internet es prácticamente universal, en el suroeste las montañas, la selva y la pobreza forman una muralla invisible.
+Imagina que estas a punto de enviar el proyecto final que define tu semestre. Tienes el conocimiento y esfuerzo, pero de repente, la señal de tu celular se desvanece con la primera lluvia. O peor aun: los datos moviles son un lujo que compite directamente con el presupuesto para la comida.
+
+La geografía sigue dictando quién tiene derecho a escribir el futuro. Mientras en el norte el acceso a internet es prácticamente universal, en el suroeste las montañas, la selva y la pobreza forman una muralla invisible.
 
 Chiapas registra apenas el **`{python} f"{estados.loc[estados['CVE_ENT']==7,'internet_pct'].values[0]:.1f}"`%** de hogares con internet según el ENDUTIH 2024. Guerrero el `{python} f"{estados.loc[estados['CVE_ENT']==12,'internet_pct'].values[0]:.1f}"`%. Oaxaca el `{python} f"{estados.loc[estados['CVE_ENT']==20,'internet_pct'].values[0]:.1f}"`%.
 :::
 
 ::: {.callout-warning icon=false}
-## El dato que lo dice todo
+## La brecha digital
 
-La brecha entre zonas **urbanas (`{python} f"{PCT_URBANO:.1f}"`%)** y **rurales (`{python} f"{PCT_RURAL:.1f}"`%)** es de **`{python} f"{BRECHA:.1f}"` puntos porcentuales**. No es una diferencia tecnológica — es una fractura social de décadas.
+La brecha entre zonas **urbanas (`{python} f"{PCT_URBANO:.1f}"`%)** y **rurales (`{python} f"{PCT_RURAL:.1f}"`%)** es de **`{python} f"{BRECHA:.1f}"`** puntos porcentuales. No es una diferencia tecnológica — es una fractura social de décadas.
 
 > La desigualdad ya no se mide solo en pesos. Se mide en la pantalla que permanece apagada.
 
-**Fuente:** ENDUTIH 2024, INEGI
 :::
 
 ::: {.callout-note icon=false}
-## ODS 10 · Reducción de desigualdades
+## Reducción de desigualdades
 
 Los estados con mayor rezago social coinciden exactamente con los de menor conectividad. En Chiapas, la pobreza alcanza el **`{python} f"{estados.loc[estados['CVE_ENT']==7,'pobreza_pct'].values[0]:.1f}"`%** de la población (CONEVAL 2020). La geografía se convierte en condena.
 
-**Fuentes:** ENDUTIH 2024 (INEGI) · CONEVAL 2020
 :::
 
 # II · Más allá del Hardware {orientation="columns"}
@@ -238,7 +238,7 @@ Los estados con mayor rezago social coinciden exactamente con los de menor conec
 ## Column {width="60%"}
 
 ```{python}
-#| title: "Conectividad por estado — la deuda histórica de infraestructura  (ENDUTIH 2024, INEGI)"
+#| title: "Conectividad por estado — infraestructura  (ENDUTIH 2024, INEGI)"
 
 df_bar = estados.sort_values("internet_pct").copy()
 df_bar["color"] = df_bar["internet_pct"].apply(
@@ -297,23 +297,25 @@ fig_bar
 ## Column {width="40%"}
 
 ::: {.callout-important icon=false}
-## Acto II · Más allá del Hardware
+## Más allá del Hardware
 
-Existe la creencia errónea de que la brecha digital se resuelve **repartiendo tabletas**. La realidad es más terca: un equipo moderno sin red es solo un trozo de plástico y cristal.
+Existe la creencia errónea de que la brecha digital se resuelve repartiendo tabletas. La realidad es diferente: un equipo moderno sin red es solo un trozo de plástico y cristal.
 
-El problema es de **ingeniería e infraestructura básica**. Sin antenas, sin servidores, sin kilómetros de fibra óptica, la innovación es un concepto lejano.
+El problema es de infraestructura básica. Sin antenas, sin servidores, sin fibra óptica, la innovación es un concepto lejano.
+
+La falta de cobertura  y las limitantes economicas mantienen a la region en un "apagon" tecnologico.    
 :::
 
 ::: {.callout-warning icon=false}
-## Pobreza + desconexión = exclusión estructural
+## Exclusión estructural
 
 En Chiapas, el **`{python} f"{estados.loc[estados['CVE_ENT']==7,'pobreza_pct'].values[0]:.1f}"`%** de la población vive en pobreza (CONEVAL 2020). Con ese ingreso, el internet no es un servicio básico — es un lujo que compite con la comida del día.
 
-Cuando la conectividad cae al **50.7%** y la pobreza supera el **65%**, el acceso a internet deja de ser un tema tecnológico y se convierte en una **deuda histórica del Estado** con sus ciudadanos.
+Cuando la conectividad cae al **50.7%** y la pobreza supera el **65%**, el acceso a internet deja de ser un tema tecnológico y se convierte en una deuda histórica del Estado con sus ciudadanos.
 :::
 
 ::: {.callout-note icon=false}
-## ODS 9 · Infraestructura resiliente
+## Infraestructura resiliente
 
 Construir infraestructura digital en el suroeste no es un favor político — es una obligación de desarrollo sostenible. Mientras las ciudades del centro dan por sentada la alta velocidad, el sur perpetúa un ciclo de exclusión que impide que la innovación llegue a quienes más la necesitan.
 
@@ -327,7 +329,7 @@ Construir infraestructura digital en el suroeste no es un favor político — es
 ### Column {width="50%"}
 
 ```{python}
-#| title: "Abandono escolar en Media Superior 2019–2024 · datos reales SEP"
+#| title: "Abandono escolar en Media Superior 2019–2024 · datos SEP"
 
 col_line = {
     "Nacional":                  (C_BLUE,  "dot"),
@@ -369,7 +371,7 @@ fig_line
 ### Column {width="50%"}
 
 ```{python}
-#| title: "Internet vs abandono escolar por estado · correlación real (ENDUTIH 2024 + SEP 2023-24)"
+#| title: "Internet vs abandono escolar por estado · correlación (ENDUTIH 2024 + SEP 2023-24)"
 
 df_sc = estados.dropna(subset=["pobreza_pct"]).copy()
 df_sc["region"] = df_sc["internet_pct"].apply(
@@ -476,25 +478,27 @@ fig_tab
 ### Column {width="33%"}
 
 ::: {.callout-important icon=false}
-## Acto III · Aulas sin Señal
+## Aulas sin Señal
 
-La correlación es real: **los estados con menor conectividad presentan los índices más altos de abandono escolar**. En el suroeste, la tasa promedio de abandono en Media Superior supera el **8%** — el doble que en entidades del norte.
+La correlación es real: los estados con menor conectividad presentan los índices más altos de abandono escolar. En el suroeste, la tasa promedio de abandono en Media Superior supera el **8%** — el doble que en entidades del norte.
 :::
 
 ::: {.callout-warning icon=false}
 ## La cifra que no puede ignorarse
 
-> Aproximadamente el **70% de las escuelas básicas** del suroeste carecen de conexión a internet pedagógica.
+> Aproximadamente el **70%** de las escuelas básicas del suroeste carecen de conexión a internet pedagógica.
+Al analizar municipio por municipio, las zonas desconectadas presentan índices mas altos de abandono escolar y bajo rendimiento. 
 
-Sin herramientas digitales, los estudiantes compiten con **una venda en los ojos**. La calidad educativa está anclada a los megabytes disponibles.
+Sin herramientas digitales, los estudiantes compiten con una venda en los ojos. La calidad educativa está anclada a los megabytes disponibles.
 
-**Fuente:** Mejoredu 2023 · SEP 2023-24
+Es practicamente imposible desarrollar competencias técnicas que el mundo laboral moderno exige si tu aula esta desconectada del flujo global de información.
+
 :::
 
 ::: {.callout-note icon=false}
-## ODS 4 · Educación de calidad
+## Educación de calidad
 
-La brecha rural (`{python} f"{PCT_RURAL:.1f}"`%) vs urbana (`{python} f"{PCT_URBANO:.1f}"`%) persiste en **`{python} f"{BRECHA:.1f}"` puntos porcentuales** al cierre de 2024. Sin intervención estructural, la convergencia tardaría más de dos décadas.
+La brecha rural (`{python} f"{PCT_RURAL:.1f}"`%) vs urbana (`{python} f"{PCT_URBANO:.1f}"`%) persiste en **`{python} f"{BRECHA:.1f}"`** puntos porcentuales al cierre de 2024. Sin intervención estructural, la convergencia tardaría más de dos décadas.
 
 **Fuentes:** ENDUTIH 2024 (INEGI) · SEP / Mejoredu 2023-24
 :::
@@ -507,20 +511,20 @@ La brecha rural (`{python} f"{PCT_RURAL:.1f}"`%) vs urbana (`{python} f"{PCT_URB
 
 ```{python}
 #| content: valuebox
-#| title: "Costo estimado / nodo"
-dict(icon="sun", color="warning", value="$45,000 MXN")
+#| title: "Costo / nodo"
+dict(icon="sun", color="warning", value="Accesible")
 ```
 
 ```{python}
 #| content: valuebox
-#| title: "Almacenamiento local"
-dict(icon="hdd", color="info", value="500 GB")
+#| title: "Tipo de Almacenamiento"
+dict(icon="hdd", color="info", value="local")
 ```
 
 ### Row {height="84%"}
 
 ```{python}
-#| title: "Viabilidad comparativa de soluciones en contexto rural extremo"
+#| title: "Viabilidad de soluciones en contexto rural extremo"
 
 criterios = [
     "Sin electricidad","Sin celular","Costo cero mensual",
@@ -530,8 +534,6 @@ c2 = criterios + [criterios[0]]
 
 data_sol = {
     "Nodo solar comunitario": ([5,5,5,4,5,5], C_GREEN),
-    "Internet convencional":  ([1,2,1,2,1,2], C_RED),
-    "Fibra óptica rural":     ([3,5,2,3,2,1], C_BLUE),
 }
 
 fig_rad = go.Figure()
@@ -623,27 +625,28 @@ fig_don
 ## Column {width="28%"}
 
 ::: {.callout-important icon=false}
-## Acto IV · Construir Puentes
+## Construir Puentes
+
+A pesar quue la constitución mexicana ya reconoce el acceso a tecnologias de la información y comunicación (TIC) como un dereccho fundamental, persisten las brechas significativas.
 
 El diagnóstico duele, pero no tiene por qué ser una sentencia permanente. La respuesta técnica existe: **el Nodo Solar Comunitario**.
 
-Un servidor local alimentado por paneles solares que funciona como **biblioteca digital sin internet externo**. Sin costo mensual. Sin dependencia de señal. Sin contenido basura.
+Un servidor local alimentado por paneles solares que funciona como biblioteca digital sin internet externo. Sin costo mensual. Sin dependencia de señal. Sin contenido basura.
 :::
 
 ::: {.callout-tip icon=false}
-## La propuesta técnica
+## La propuesta
 
 **¿Por qué sin internet total?**
 
-El acceso externo requiere ancho de banda que no existe, genera costos recurrentes insostenibles y abre la puerta a contenido inapropiado. El nodo solo accede a su **almacenamiento local curado**: libros de texto SEP, Khan Academy offline, Wikipedia, recursos de salud e idiomas indígenas.
+El acceso externo requiere ancho de banda que no existe, genera costos recurrentes insostenibles y abre la puerta a contenido inapropiado. El nodo solo accede a su almacenamiento local curado: libros de texto SEP, Khan Academy offline, Wikipedia, recursos de salud e idiomas indígenas.
 
-**Resultado:** educación autónoma, resiliente y comunitaria a **$45,000 MXN por nodo**.
+**Resultado:** educación autónoma, resiliente y comunitaria a un precio accesible por nodo.
 :::
 
 ::: {.callout-note icon=false}
-## ODS 17 · Alianzas para los objetivos
+## Alianzas para los objetivos
 
-Ningún municipio ni gobierno local puede resolver esto solo. Se requieren **alianzas estratégicas** entre universidades, gobierno federal, iniciativa privada y comunidades para diseñar, subsidiar, instalar y operar los nodos.
+La escuela o comisaria ejidal resguarda el equipo. El mantenimiento es minimo porque no tiene partes móviles. Las universidades cerca pueden actuar como centros de actualización de contenido.
 
-**Fuentes:** Naciones Unidas (2015) · CONEVAL (2020) · INEGI ENDUTIH 2024
 :::
