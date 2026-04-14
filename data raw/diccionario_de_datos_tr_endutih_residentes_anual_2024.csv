@@ -1,0 +1,33 @@
+COLUMNA,DESCRIPCION,TIPO_DATO,LONGITUD,CODIGO_VALIDO,METADATOS
+UPM,Unidad primaria de muestreo,Varchar ,7,[],Unidad primaria de muestreo
+VIV_SEL,Vivienda seleccionada ,Varchar ,2,[],Vivienda seleccionada 
+HOGAR,Número de Hogar en la vivienda,Varchar ,2,[],Número de Hogar en la vivienda
+NUM_REN,Número de renglón,Varchar ,2,[],Número de renglón
+PAREN,3.3 ¿Qué es (NOMBRE) de la jefa o jefe del hogar? REGISTRE UN SOLO CÃ“DIGO,Varchar,1,[1-6],"1 Jefe(a),2 Esposo(a) o compañero(a), 3 Hijo(a), 4 Nieto(a), 5 Otro parentesco, 6 Sin parentesco"
+SEXO,3.4 ¿(NOMBRE) es hombre? ¿(NOMBRE) es mujer? REGISTRE UN SOLO CÃ“DIGO,Varchar,1,[1-2],"1 Hombre, 2 Mujer"
+EDAD,3.5 ¿Cuántos años cumplidos tiene (NOMBRE)?,Numeric,2,[0-99],"0 - 96 Edad en años cumplidos del residente habitual en el hogar, 97 Residentes de 97 o más años, 98 Edad no especificada en personas de 6 años o más, 99 Edad no especificada en personas de 5 años o menos"
+DIA,3.6 ¿En qué día nació (NOMBRE)?,Varchar ,2,"[01-31, 99]","01 - 31 Día de nacimiento del residente habitual en el hogar, 99 No especificado "
+MES,3.6 ¿En qué mes nació (NOMBRE)?,Varchar ,2,"[01-12, 99]","01 - 12 Mes de nacimiento del residente habitual en el hogar, 99 No especificado "
+P3_7,3.7 ¿(NOMBRE) asiste actualmente a la escuela?,Varchar,1,[1-2],"1 Sí, 2 No"
+NIVEL,"3.8 ¿Hasta qué año o grado aprobó (NOMBRE) en la escuela? 
+Nivel",Varchar ,2,"[00-11, 99]","00 Ninguno, 01 Preescolar o kínder, 02 Primaria, 03 Secundaria, 04 Normal básica, 05 Estudio técnico terminal con secundaria, 06 Preparatoria o bachillerato, 07 Estudio técnico superior con preparatoria terminada, 08 Licenciatura o ingeniería, 09 Especialidad, 10 Maestría, 11 Doctorado, 99 No sabe"
+GRADO,"3.8 ¿Hasta qué año o grado aprobó (NOMBRE) en la escuela? 
+Grado",Varchar ,1,[0-9],Grado o año hasta el que aprobó la escuela el residente habitual en el hogar
+P3_9_1,"3.9 En los últimos tres meses, ¿(NOMBRE) ha hecho uso de:
+ computadora, laptop o tablet?",Varchar,1,"[1-2, 9]","1 Sí, 2 No, 9 No sabe, "
+P3_9_2,"3.9 En los últimos tres meses, ¿(NOMBRE) ha hecho uso de:
+ internet?",Varchar,1,"[1-2, 9]","1 Sí, 2 No, 9 No sabe, "
+P3_9_3,"3.9 En los últimos tres meses, ¿(NOMBRE) ha hecho uso de:
+ celular?",Varchar,1,"[1-2, 9]","1 Sí, 2 No, 9 No sabe, "
+P3_10,3.10 ¿La semana pasada (NOMBRE):,Varchar,1,[1-9],"1 ¿trabajó por lo menos una hora?, 2 ¿tenía trabajo, pero no trabajó?, 3 ¿buscó trabajo?, 4 ¿hizo gestiones o realizó trámites para iniciar un negocio o actividad por su cuenta?, 5 ¿es persona jubilada o pensionada?, 6 ¿es estudiante?, 7 ¿se dedica a los quehaceres del hogar y/o al cuidado de algún familiar?, 8 ¿tiene alguna limitación física o mental que le impide trabajar?, 9 Estaba en otra situación diferente a las anteriores"
+P3_11,"3.11 Aunque ya  dijo que (NOMBRE) no trabajó, ¿la semana pasada:",Varchar,1,[1-4],"1 ¿vendió o hizo algún producto para su venta?, 2 ¿prestó algún servicio a cambio de un pago (cortar cabello, dar clases, lavar ropa ajena) ?, 3 ¿ayudó en las tierras o en el negocio de un familiar o de otra persona?, 4 Entonces, ¿no trabajó?"
+P3_12,3.12 ¿En su trabajo o actividad de la semana pasada (NOMBRE) fue:,Varchar,1,[1-6],"1 ¿empleada(o) u obrera(o) ?, 2 ¿jornalera(o) o peón?, 3 ¿ayudante con pago?, 4 ¿patrón(a) o empleador(a) (contrata trabajadoras(es) por un sueldo?, 5 ¿trabajador(a) por cuenta propia (no tiene trabajadoras(es) por un sueldo) ?, 6 ¿trabajador(a) sin pago?"
+FAC_HOGAR,Factor,Numeric,5,[],Factor
+UPM_DIS,Unidad primaria de muestreo,Varchar,5,[],Unidad primaria de muestreo
+EST_DIS,Estrato de diseño muestral,Varchar,3,[],Estrato de diseño muestral
+DOMINIO,Población rural y urbana,Varchar,1,"[R,U]",Población rural y urbana
+TLOC,Tamaño de la Localidad,Varchar,1,[1-4],"1 100,000 y más habitantes, 2 15,000 a 99,999 habitantes, 3 2,500 a 14,999 habitantes, 4 menor a 2500 habitantes "
+ESTRATO,Estrato socioeconómico,Varchar,1,[1-4],"1 Bajo, 2 Medio bajo, 3 Medio alto, 4 Alto"
+CVE_ENT,Clave del AGEE,Varchar,2,[01-32],"{01, 02, …, 32}"
+CVEGEO,Clave geoestadística concatenada,Varchar,2,[01-32],Compuesta por 2 caracteres; dos para la clave del AGEE
+ESTATUS,Estatus,Varchar,20,[],"Cifras Definitivas, Cifras Revisadas, Cifras Preliminares"

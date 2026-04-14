@@ -1,0 +1,186 @@
+/*-- scss:defaults --*/
+
+$primary:            #1d4ed8;
+$secondary:          #64748b;
+$success:            #15803d;
+$info:               #0369a1;
+$warning:            #92400e;
+$danger:             #991b1b;
+$light:              #f8fafc;
+$dark:               #0f172a;
+
+$font-family-sans-serif: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+$font-size-base:         0.875rem;
+$line-height-base:       1.7;
+$headings-font-weight:   700;
+$border-radius:          8px;
+$card-border-radius:     10px;
+$card-cap-bg:            #f8fafc;
+$card-border-color:      rgba(0, 0, 0, 0.07);
+
+/*-- scss:rules --*/
+
+/* ── Navbar ─────────────────────────────────────────── */
+.navbar {
+  background: linear-gradient(135deg, #0f2744 0%, #14532d 100%) !important;
+  padding: 0.42rem 1.5rem;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.2);
+}
+.navbar-brand {
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: #fff !important;
+}
+.navbar-nav .nav-link {
+  color: rgba(255,255,255,0.8) !important;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.28rem 0.8rem !important;
+  border-radius: 5px;
+  letter-spacing: 0.02em;
+  transition: background 0.15s;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  background: rgba(255,255,255,0.14) !important;
+  color: #fff !important;
+}
+
+/* ── Título principal ───────────────────────────────── */
+.quarto-title-block .title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+  line-height: 1.2;
+}
+.quarto-title-block .subtitle {
+  font-size: 0.82rem;
+  color: #475569;
+  font-weight: 400;
+  font-style: italic;
+  margin-top: 0.3rem;
+}
+
+/* ── Value boxes — compactos ────────────────────────── */
+.value-box {
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.07) !important;
+}
+.value-box .value-box-grid {
+  padding: 0.4rem 0.85rem !important;
+  min-height: unset !important;
+}
+.value-box-title {
+  font-size: 0.6rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.88;
+  margin-bottom: 0.08rem !important;
+  line-height: 1.2 !important;
+}
+.value-box-value {
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em;
+}
+.value-box-showcase {
+  font-size: 1.2rem !important;
+  padding: 0 0.5rem !important;
+}
+
+/* ── Cards ──────────────────────────────────────────── */
+.card {
+  border: 1px solid rgba(0,0,0,0.065) !important;
+  border-radius: $card-border-radius !important;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.045) !important;
+  transition: box-shadow 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.09) !important;
+}
+.card-header {
+  background: #f8fafc !important;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #475569 !important;
+  border-bottom: 1px solid rgba(0,0,0,0.055) !important;
+  padding: 0.45rem 1rem !important;
+}
+
+/* ── Callouts — estilo "pull quote" editorial ───────── */
+.callout {
+  border-radius: 9px !important;
+  border-left-width: 4px !important;
+  font-size: 0.85rem;
+  line-height: 1.75;
+  margin-bottom: 1rem !important;
+  padding: 0.9rem 1.1rem !important;
+}
+.callout-important {
+  border-left-color: #c0392b !important;
+  background: #fff5f5 !important;
+}
+.callout-warning {
+  border-left-color: #d97706 !important;
+  background: #fffbeb !important;
+}
+.callout-note {
+  border-left-color: #1d4ed8 !important;
+  background: #eff6ff !important;
+}
+.callout-tip {
+  border-left-color: #15803d !important;
+  background: #f0fdf4 !important;
+}
+.callout-title {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem !important;
+}
+.callout p {
+  margin-bottom: 0.5rem;
+  font-size: 0.84rem;
+}
+.callout strong {
+  color: #0f172a;
+}
+
+/* ── Blockquote dentro de callout ───────────────────── */
+blockquote {
+  border-left: 3px solid #c0392b;
+  padding: 0.4rem 0.9rem;
+  margin: 0.6rem 0;
+  background: rgba(192,57,43,0.05);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #1e293b;
+}
+
+/* ── Tablas Markdown ────────────────────────────────── */
+.table { font-size: 0.79rem; }
+.table thead th {
+  font-weight: 600; color: #1e293b;
+  background: #f1f5f9;
+  border-bottom: 2px solid #cbd5e1 !important;
+  padding: 0.48rem 0.7rem;
+}
+.table tbody td {
+  padding: 0.38rem 0.7rem;
+  vertical-align: middle;
+  border-color: #f1f5f9 !important;
+}
+
+/* ── Scrollbar sutil ────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.16); border-radius: 3px; }

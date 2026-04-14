@@ -15,8 +15,11 @@ name = "abejasastutas"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "ipykernel" },
     { name = "jupyter" },
     { name = "matplotlib" },
+    { name = "nbclient" },
+    { name = "nbformat" },
     { name = "notebook" },
     { name = "pandas" },
     { name = "plotly" },
@@ -25,8 +28,11 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "jupyter", specifier = ">=1.1.1" },
     { name = "matplotlib", specifier = ">=3.10.8" },
+    { name = "nbclient", specifier = "<0.10.0" },
+    { name = "nbformat", specifier = ">=5.10.4" },
     { name = "notebook", specifier = ">=7.5.5" },
     { name = "pandas", specifier = ">=3.0.2" },
     { name = "plotly", specifier = ">=6.7.0" },
@@ -1082,7 +1088,7 @@ wheels = [
 
 [[package]]
 name = "nbclient"
-version = "0.10.4"
+version = "0.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jupyter-client" },
@@ -1090,9 +1096,9 @@ dependencies = [
     { name = "nbformat" },
     { name = "traitlets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/56/91/1c1d5a4b9a9ebba2b4e32b8c852c2975c872aec1fe42ab5e516b2cecd193/nbclient-0.10.4.tar.gz", hash = "sha256:1e54091b16e6da39e297b0ece3e10f6f29f4ac4e8ee515d29f8a7099bd6553c9", size = 62554, upload-time = "2025-12-23T07:45:46.369Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/79/14/3d476e879ee9e1d6cfe798e13d39ab4b0e5102b1970dfbdc7dbe8f75a1b6/nbclient-0.9.1.tar.gz", hash = "sha256:4f7b78c6c2a380e228f8a3bb469b847cb24e5b8ad6fda410691b5621e05ce5a2", size = 60854, upload-time = "2024-03-12T15:48:42.659Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/83/a0/5b0c2f11142ed1dddec842457d3f65eaf71a0080894eb6f018755b319c3a/nbclient-0.10.4-py3-none-any.whl", hash = "sha256:9162df5a7373d70d606527300a95a975a47c137776cd942e52d9c7e29ff83440", size = 25465, upload-time = "2025-12-23T07:45:44.51Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/41/c3bdff990ded5607321af31e284223eb5fa702e375332fd805f2a9163522/nbclient-0.9.1-py3-none-any.whl", hash = "sha256:2c50a866e8dd6c5f655de47d2e252c82d2ebe978574e760ac229f5950593a434", size = 24816, upload-time = "2024-03-12T15:48:40.163Z" },
 ]
 
 [[package]]

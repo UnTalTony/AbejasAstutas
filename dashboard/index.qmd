@@ -1,54 +1,649 @@
---- 
-title: "Brecha Digital y Riesgo Educativo en el Sureste"
-author: "Equipo Abejas Astutas"
-format: dashboard
---- 
+---
+title: "Desconectados"
+subtitle: "El verdadero costo de estudiar en el suroeste de México · Una crisis de infraestructura (ODS 9) que sentencia el futuro educativo (ODS 4)"
+author: "Abejas Astutas · HackODS UNAM 2026"
+format:
+  dashboard:
+    theme:
+      - cosmo
+      - custom.scss
+    nav-buttons:
+      - icon: github
+        href: https://github.com/UnTalTony/AbejasAstutas
+    orientation: rows
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+  message: false
+---
 
 ```{python}
+#| include: false
+
 import pandas as pd
+import plotly.graph_objects as go
 import plotly.express as px
+import warnings
+warnings.filterwarnings("ignore")
 
-# 1. Datos del Histórico de Abandono (SEP)
-df_lineas = pd.DataFrame({
-    "ciclo_escolar": ["2019-2020", "2020-2021", "2021-2022", "2022-2023", "2023-2024"] * 3,
-    "tasa_abandono_pct": [5.7, 14.8, 8.5, 8.6, 8.7, 7.0, 12.5, 9.0, 8.8, 8.9, 6.2, 13.2, 10.1, 9.5, 9.2],
-    "Estado": ["Chiapas"]*5 + ["Guerrero"]*5 + ["Oaxaca"]*5
-})
+# ── Evita que Quarto renderice cada add_trace() como output separado ─────────
+from IPython.core.interactiveshell import InteractiveShell
+InteractiveShell.ast_node_interactivity = "last_expr"
 
-# 2. Datos de Desconexión (ENDUTIH vs SEP)
-df_scatter = pd.DataFrame({
-    "Estado": ["Chiapas", "Oaxaca", "Guerrero", "Media Nacional"],
-    "Hogares_con_PC_PCT": [16.0, 18.0, 22.0, 45.0],
-    "Tasa_Abandono_Actual": [8.78, 8.65, 8.52, 5.0]
-})
+import plotly.io as pio
+pio.renderers.default = "notebook"
 
-# 3. Datos de Pobreza (CONEVAL)
-df_pobreza = pd.DataFrame({
-    "Estado": ["Chiapas", "Guerrero", "Oaxaca"],
-    "Pobreza_Extrema_PCT": [29.3, 25.5, 20.6]
-})
+# ── Paleta y utilidades ──────────────────────────────────────────────────────
+C_RED   = "#c0392b"
+C_AMBER = "#d97706"
+C_GREEN = "#15803d"
+C_BLUE  = "#1d4ed8"
+C_MUTED = "#64748b"
+FONT    = "Inter, Segoe UI, system-ui, sans-serif"
+BG      = "rgba(0,0,0,0)"
 
-Row {height=60%}
+def L(**ov):
+    base = dict(
+        paper_bgcolor=BG, plot_bgcolor=BG,
+        font=dict(family=FONT, size=11, color="#1e293b"),
+        margin=dict(l=10, r=10, t=30, b=10),
+    )
+    base.update(ov)
+    return base
 
-#| title: El Impacto de la Pandemia: Abandono Escolar Histórico (2019-2024)
-px.line(
-    df_lineas, x="ciclo_escolar", y="tasa_abandono_pct", 
-    color="Estado", markers=True,
-    labels={"tasa_abandono_pct": "Tasa de Abandono (%)", "ciclo_escolar": "Ciclo Escolar"}
+def hex_rgba(h, a=0.13):
+    h = h.lstrip("#")
+    r, g, b = int(h[0:2],16), int(h[2:4],16), int(h[4:6],16)
+    return f"rgba({r},{g},{b},{a})"
+
+# Los datos procesados por 01_procesar_datos.ipynb se leen desde datos/
+# ─────────────────────────────────────────────────────────────────────────────
+DATA = "../datos"
+
+estados   = pd.read_csv(f"{DATA}/estados.csv")
+tendencia = pd.read_csv(f"{DATA}/tendencia_abandono.csv")
+nac       = pd.read_csv(f"{DATA}/nacional.csv").iloc[0]
+
+MEDIA_NAC  = nac["media_nacional"]
+PCT_URBANO = nac["pct_urbano"]
+PCT_RURAL  = nac["pct_rural"]
+BRECHA     = nac["brecha_ur"]
+
+estados["nodo"] = estados["nodo"].astype(bool)
+estados = estados.sort_values("internet_pct").reset_index(drop=True)
+```
+
+# I · La Lotería Geográfica {orientation="columns"}
+
+## Column {width="62%"}
+
+### Row {height="16%"}
+
+```{python}
+#| content: valuebox
+#| title: "Internet hogares · Chiapas"
+dict(icon="wifi-off", color="danger",
+     value=f"{estados.loc[estados['CVE_ENT']==7,'internet_pct'].values[0]:.1f} %")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Internet hogares · Oaxaca"
+dict(icon="wifi-off", color="danger",
+     value=f"{estados.loc[estados['CVE_ENT']==20,'internet_pct'].values[0]:.1f} %")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Media nacional · ENDUTIH 2024"
+dict(icon="wifi", color="info", value=f"{MEDIA_NAC:.1f} %")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Brecha rural vs urbana"
+dict(icon="arrows-collapse-vertical", color="warning", value=f"{BRECHA:.1f} pp")
+```
+
+### Row {height="84%"}
+
+```{python}
+#| title: "Brecha digital por estado — República Mexicana  ·  menú ▾ para cambiar indicador"
+
+metricas = [
+    ("Sin internet (%)",     "brecha",       "Reds",    "Hogares sin internet"),
+    ("Pobreza (%)",          "pobreza_pct",  "Oranges", "Población en pobreza"),
+    ("Abandono escolar (%)", "abandono_pct", "YlOrRd",  "Abandono esc. MS"),
+]
+
+fig_map = go.Figure()
+
+for i, (label, col, cscale, hover_lbl) in enumerate(metricas):
+    vals  = estados[col].round(1).tolist()
+    mn, mx = estados[col].min(), estados[col].max()
+    sizes = [10 + 22*(v-mn)/(mx-mn) for v in vals]
+
+    fig_map.add_trace(go.Scattergeo(
+        lat=estados["lat"].tolist(), lon=estados["lon"].tolist(),
+        mode="markers",
+        marker=dict(
+            size=sizes, color=vals,
+            colorscale=cscale, cmin=mn, cmax=mx,
+            showscale=True,
+            colorbar=dict(
+                title=dict(text=label, font=dict(size=10)),
+                thickness=12, len=0.58,
+                x=1.01, xanchor="left",
+                y=0.5,  yanchor="middle",
+                tickfont=dict(size=9), outlinewidth=0,
+            ),
+            line=dict(color="white", width=0.7),
+            opacity=0.88,
+        ),
+        text=estados["nombre"].tolist(),
+        customdata=vals,
+        hovertemplate=(
+            "<b>%{text}</b><br>"
+            + hover_lbl + ": <b>%{customdata:.1f}%</b>"
+            + "<extra></extra>"
+        ),
+        visible=(i==0), showlegend=False,
+    ))
+
+# Nodos prioritarios — capa permanente
+nodos = estados[estados["nodo"]]
+fig_map.add_trace(go.Scattergeo(
+    lat=nodos["lat"].tolist(), lon=nodos["lon"].tolist(),
+    mode="markers+text",
+    marker=dict(size=10, color="#6ee7b7", symbol="star",
+                line=dict(color="#065f46", width=1.2)),
+    text=nodos["nombre"].tolist(),
+    textfont=dict(size=8, color="#065f46"),
+    textposition="top right",
+    hovertemplate="<b>%{text}</b><br>⚡ Zona prioritaria nodo solar<extra></extra>",
+    name="Zona prioritaria nodo solar",
+    showlegend=True, visible=True,
+))
+
+n = len(metricas)
+buttons = []
+for i, (label,*_) in enumerate(metricas):
+    vis = [False]*n + [True]
+    vis[i] = True
+    buttons.append(dict(label=label, method="update", args=[{"visible": vis}]))
+
+fig_map.update_layout(
+    **L(margin=dict(l=0, r=110, t=55, b=20)),
+    updatemenus=[dict(
+        type="dropdown", buttons=buttons,
+        direction="down", showactive=True, active=0,
+        bgcolor="#f8fafc", bordercolor="#cbd5e1", borderwidth=1,
+        font=dict(size=11, family=FONT),
+        x=0.01, xanchor="left", y=1.12, yanchor="top",
+        pad=dict(b=5, t=5, r=8, l=4),
+    )],
+    legend=dict(
+        orientation="h", yanchor="bottom", y=-0.05,
+        xanchor="left", x=0.0, font=dict(size=10),
+        bgcolor="rgba(255,255,255,0.7)",
+        bordercolor="#e2e8f0", borderwidth=1,
+    ),
+    geo=dict(
+        scope="north america",
+        showland=True,       landcolor="#f1f5f9",
+        showocean=True,      oceancolor="#dbeafe",
+        showcoastlines=True, coastlinecolor="#94a3b8", coastlinewidth=0.5,
+        showcountries=True,  countrycolor="#475569",   countrywidth=0.7,
+        showsubunits=True,   subunitcolor="#94a3b8",   subunitwidth=0.4,
+        showlakes=False, showframe=False, bgcolor=BG,
+        lataxis=dict(range=[13.5, 33.5]),
+        lonaxis=dict(range=[-119, -85]),
+    ),
 )
 
-Row {height=40%}
+fig_map
+```
 
-#| title: La Raíz del Problema: Desconexión vs Abandono Actual
-px.scatter(
-    df_scatter, x="Hogares_con_PC_PCT", y="Tasa_Abandono_Actual", 
-    color="Estado", size=[4,4,4,6], size_max=15,
-    labels={"Hogares_con_PC_PCT": "% Hogares con PC (ENDUTIH)", "Tasa_Abandono_Actual": "% Abandono Actual (SEP)"}
+## Column {width="38%"}
+
+::: {.callout-important icon=false}
+## Acto I · La Lotería Geográfica
+
+La geografía sigue dictando **quién tiene derecho a escribir el futuro**. Mientras en el norte el acceso a internet es prácticamente universal, en el suroeste las montañas, la selva y la pobreza forman una muralla invisible.
+
+Chiapas registra apenas el **`{python} f"{estados.loc[estados['CVE_ENT']==7,'internet_pct'].values[0]:.1f}"`%** de hogares con internet según el ENDUTIH 2024. Guerrero el `{python} f"{estados.loc[estados['CVE_ENT']==12,'internet_pct'].values[0]:.1f}"`%. Oaxaca el `{python} f"{estados.loc[estados['CVE_ENT']==20,'internet_pct'].values[0]:.1f}"`%.
+:::
+
+::: {.callout-warning icon=false}
+## El dato que lo dice todo
+
+La brecha entre zonas **urbanas (`{python} f"{PCT_URBANO:.1f}"`%)** y **rurales (`{python} f"{PCT_RURAL:.1f}"`%)** es de **`{python} f"{BRECHA:.1f}"` puntos porcentuales**. No es una diferencia tecnológica — es una fractura social de décadas.
+
+> La desigualdad ya no se mide solo en pesos. Se mide en la pantalla que permanece apagada.
+
+**Fuente:** ENDUTIH 2024, INEGI
+:::
+
+::: {.callout-note icon=false}
+## ODS 10 · Reducción de desigualdades
+
+Los estados con mayor rezago social coinciden exactamente con los de menor conectividad. En Chiapas, la pobreza alcanza el **`{python} f"{estados.loc[estados['CVE_ENT']==7,'pobreza_pct'].values[0]:.1f}"`%** de la población (CONEVAL 2020). La geografía se convierte en condena.
+
+**Fuentes:** ENDUTIH 2024 (INEGI) · CONEVAL 2020
+:::
+
+# II · Más allá del Hardware {orientation="columns"}
+
+## Column {width="60%"}
+
+```{python}
+#| title: "Conectividad por estado — la deuda histórica de infraestructura  (ENDUTIH 2024, INEGI)"
+
+df_bar = estados.sort_values("internet_pct").copy()
+df_bar["color"] = df_bar["internet_pct"].apply(
+    lambda x: C_RED if x < 65 else (C_AMBER if x < 78 else C_GREEN))
+
+fig_bar = go.Figure()
+fig_bar.add_trace(go.Bar(
+    x=df_bar["internet_pct"],
+    y=df_bar["nombre"],
+    orientation="h",
+    marker_color=df_bar["color"].tolist(),
+    marker_line_width=0,
+    text=[f"{v:.1f}%" for v in df_bar["internet_pct"]],
+    textposition="outside",
+    textfont=dict(size=8.5),
+    cliponaxis=False,
+    customdata=df_bar["pobreza_pct"].fillna(0).round(1).tolist(),
+    hovertemplate=(
+        "<b>%{y}</b><br>Internet: %{x:.1f}%<br>"
+        "Pobreza: %{customdata:.1f}%<extra></extra>"
+    ),
+))
+fig_bar.add_vline(
+    x=MEDIA_NAC, line_dash="dot", line_color=C_BLUE, line_width=1.5,
+    annotation_text=f"Media nacional {MEDIA_NAC}%",
+    annotation_font_size=9, annotation_font_color=C_BLUE,
+    annotation_position="top right",
+)
+for color, etq in [
+    (C_RED, "< 65 % · crítico"),
+    (C_AMBER, "65–78 % · medio"),
+    (C_GREEN, "> 78 % · alto"),
+]:
+    fig_bar.add_trace(go.Scatter(
+        x=[None], y=[None], mode="markers",
+        marker=dict(size=9, color=color, symbol="square"),
+        name=etq, showlegend=True,
+    ))
+
+fig_bar.update_layout(
+    **L(margin=dict(l=0, r=55, t=15, b=40)),
+    xaxis=dict(title="Hogares con acceso a internet (%)", range=[38, 102]),
+    yaxis=dict(title="", automargin=True, tickfont=dict(size=9)),
+    legend=dict(
+        orientation="v", yanchor="bottom", y=0.01,
+        xanchor="right", x=1.0, font=dict(size=9),
+        bgcolor="rgba(255,255,255,0.8)",
+        bordercolor="#e2e8f0", borderwidth=1,
+    ),
+    bargap=0.22, height=570,
 )
 
-#| title: Viabilidad de Hardware: Pobreza Extrema en el Suroeste
-px.bar(
-    df_pobreza, x="Estado", y="Pobreza_Extrema_PCT", 
-    color="Estado",
-    labels={"Pobreza_Extrema_PCT": "% Pobreza Extrema (CONEVAL)"}
+fig_bar
+```
+
+## Column {width="40%"}
+
+::: {.callout-important icon=false}
+## Acto II · Más allá del Hardware
+
+Existe la creencia errónea de que la brecha digital se resuelve **repartiendo tabletas**. La realidad es más terca: un equipo moderno sin red es solo un trozo de plástico y cristal.
+
+El problema es de **ingeniería e infraestructura básica**. Sin antenas, sin servidores, sin kilómetros de fibra óptica, la innovación es un concepto lejano.
+:::
+
+::: {.callout-warning icon=false}
+## Pobreza + desconexión = exclusión estructural
+
+En Chiapas, el **`{python} f"{estados.loc[estados['CVE_ENT']==7,'pobreza_pct'].values[0]:.1f}"`%** de la población vive en pobreza (CONEVAL 2020). Con ese ingreso, el internet no es un servicio básico — es un lujo que compite con la comida del día.
+
+Cuando la conectividad cae al **50.7%** y la pobreza supera el **65%**, el acceso a internet deja de ser un tema tecnológico y se convierte en una **deuda histórica del Estado** con sus ciudadanos.
+:::
+
+::: {.callout-note icon=false}
+## ODS 9 · Infraestructura resiliente
+
+Construir infraestructura digital en el suroeste no es un favor político — es una obligación de desarrollo sostenible. Mientras las ciudades del centro dan por sentada la alta velocidad, el sur perpetúa un ciclo de exclusión que impide que la innovación llegue a quienes más la necesitan.
+
+**Fuentes:** ENDUTIH 2024 (INEGI) · CONEVAL 2020
+:::
+
+# III · Aulas sin Señal {orientation="rows"}
+
+## Row {height="52%"}
+
+### Column {width="50%"}
+
+```{python}
+#| title: "Abandono escolar en Media Superior 2019–2024 · datos reales SEP"
+
+col_line = {
+    "Nacional":                  (C_BLUE,  "dot"),
+    "Suroeste (Chis/Gro/Oax)":  (C_RED,   "solid"),
+    "Norte (B.C./Coah/N.L.)":   (C_GREEN, "dash"),
+}
+
+fig_line = go.Figure()
+for serie, (color, dash) in col_line.items():
+    fig_line.add_trace(go.Scatter(
+        x=tendencia["anio"],
+        y=tendencia[serie],
+        mode="lines+markers", name=serie,
+        line=dict(color=color, dash=dash, width=2.3),
+        marker=dict(size=7, color=color),
+        hovertemplate=f"<b>{serie}</b><br>Ciclo: %{{x}}<br>Abandono: %{{y:.2f}}%<extra></extra>",
+    ))
+
+fig_line.update_layout(
+    **L(margin=dict(l=20, r=20, t=15, b=75)),
+    xaxis=dict(
+        title="Ciclo escolar (año de término)",
+        tickmode="array",
+        tickvals=[2020,2021,2022,2023,2024],
+        ticktext=["2019-20","2020-21","2021-22","2022-23","2023-24"],
+        tickangle=-30,
+    ),
+    yaxis=dict(title="Tasa de abandono escolar (%)", range=[0, 16]),
+    hovermode="x unified",
+    legend=dict(
+        orientation="h", yanchor="bottom", y=-0.32,
+        xanchor="center", x=0.5, font=dict(size=10),
+    ),
 )
+
+fig_line
+```
+
+### Column {width="50%"}
+
+```{python}
+#| title: "Internet vs abandono escolar por estado · correlación real (ENDUTIH 2024 + SEP 2023-24)"
+
+df_sc = estados.dropna(subset=["pobreza_pct"]).copy()
+df_sc["region"] = df_sc["internet_pct"].apply(
+    lambda x: "Suroeste crítico" if x < 65
+    else ("En desarrollo" if x < 78 else "Mayor conectividad")
+)
+
+fig_sc = px.scatter(
+    df_sc,
+    x="internet_pct", y="abandono_pct",
+    color="region",
+    color_discrete_map={
+        "Suroeste crítico":   C_RED,
+        "En desarrollo":      C_AMBER,
+        "Mayor conectividad": C_GREEN,
+    },
+    text="nombre", size="pobreza_pct",
+    size_max=22,
+    labels={
+        "internet_pct":  "Hogares con internet (%)",
+        "abandono_pct":  "Abandono escolar MS (%)",
+        "region":        "",
+    },
+    hover_data={
+        "internet_pct": ":.1f",
+        "abandono_pct": ":.2f",
+        "pobreza_pct":  ":.1f",
+        "nombre": False, "region": False,
+    },
+    custom_data=["nombre","pobreza_pct"],
+)
+fig_sc.update_traces(
+    textposition="top center", textfont_size=8,
+    marker=dict(opacity=0.82, line=dict(color="white", width=0.8)),
+    hovertemplate=(
+        "<b>%{customdata[0]}</b><br>"
+        "Internet: %{x:.1f}%<br>"
+        "Abandono: %{y:.2f}%<br>"
+        "Pobreza: %{customdata[1]:.1f}%<extra></extra>"
+    ),
+)
+fig_sc.update_layout(
+    **L(margin=dict(l=20, r=20, t=15, b=70)),
+    legend=dict(
+        orientation="h", yanchor="bottom", y=-0.28,
+        xanchor="center", x=0.5, font=dict(size=10),
+        bgcolor="rgba(255,255,255,0.8)",
+        bordercolor="#e2e8f0", borderwidth=1,
+    ),
+)
+
+fig_sc
+```
+
+## Row {height="48%"}
+
+### Column {width="67%"}
+
+```{python}
+#| title: "Indicadores por estado · fuentes oficiales INEGI 2024 / CONEVAL 2020 / SEP 2023-24"
+
+tabla = estados[["nombre","internet_pct","pobreza_pct","abandono_pct","brecha","nodo"]].copy()
+tabla = tabla.rename(columns={
+    "nombre":       "Estado",
+    "internet_pct": "Internet (%)",
+    "pobreza_pct":  "Pobreza (%)",
+    "abandono_pct": "Abandono MS (%)",
+    "brecha":       "Sin internet (%)",
+    "nodo":         "Nodo",
+})
+tabla["Nodo"] = tabla["Nodo"].map({True:"⚡",False:"—"})
+tabla["Pobreza (%)"] = tabla["Pobreza (%)"].fillna("—")
+
+n = len(tabla)
+fill_int = [
+    "#fee2e2" if isinstance(v,float) and v < 65
+    else ("#fef3c7" if isinstance(v,float) and v < 78 else "#dcfce7")
+    for v in tabla["Internet (%)"].tolist()
+]
+fill_alt = ["#f8fafc" if i%2==0 else "white" for i in range(n)]
+
+fig_tab = go.Figure(go.Table(
+    columnwidth=[140,85,85,95,100,55],
+    header=dict(
+        values=[f"<b>{c}</b>" for c in tabla.columns],
+        fill_color="#1e3a5f",
+        font=dict(color="white", size=11, family=FONT),
+        align=["left","right","right","right","right","center"],
+        height=32, line_color="#1e3a5f",
+    ),
+    cells=dict(
+        values=[tabla[c].tolist() for c in tabla.columns],
+        fill_color=[fill_alt, fill_int] + [fill_alt]*4,
+        font=dict(size=10.5, family=FONT),
+        align=["left","right","right","right","right","center"],
+        height=26, line_color="#e2e8f0",
+    ),
+))
+fig_tab.update_layout(paper_bgcolor=BG, margin=dict(l=0,r=0,t=0,b=0))
+
+fig_tab
+```
+
+### Column {width="33%"}
+
+::: {.callout-important icon=false}
+## Acto III · Aulas sin Señal
+
+La correlación es real: **los estados con menor conectividad presentan los índices más altos de abandono escolar**. En el suroeste, la tasa promedio de abandono en Media Superior supera el **8%** — el doble que en entidades del norte.
+:::
+
+::: {.callout-warning icon=false}
+## La cifra que no puede ignorarse
+
+> Aproximadamente el **70% de las escuelas básicas** del suroeste carecen de conexión a internet pedagógica.
+
+Sin herramientas digitales, los estudiantes compiten con **una venda en los ojos**. La calidad educativa está anclada a los megabytes disponibles.
+
+**Fuente:** Mejoredu 2023 · SEP 2023-24
+:::
+
+::: {.callout-note icon=false}
+## ODS 4 · Educación de calidad
+
+La brecha rural (`{python} f"{PCT_RURAL:.1f}"`%) vs urbana (`{python} f"{PCT_URBANO:.1f}"`%) persiste en **`{python} f"{BRECHA:.1f}"` puntos porcentuales** al cierre de 2024. Sin intervención estructural, la convergencia tardaría más de dos décadas.
+
+**Fuentes:** ENDUTIH 2024 (INEGI) · SEP / Mejoredu 2023-24
+:::
+
+# IV · Construir Puentes {orientation="columns"}
+
+## Column {width="40%"}
+
+### Row {height="16%"}
+
+```{python}
+#| content: valuebox
+#| title: "Costo estimado / nodo"
+dict(icon="sun", color="warning", value="$45,000 MXN")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Almacenamiento local"
+dict(icon="hdd", color="info", value="500 GB")
+```
+
+### Row {height="84%"}
+
+```{python}
+#| title: "Viabilidad comparativa de soluciones en contexto rural extremo"
+
+criterios = [
+    "Sin electricidad","Sin celular","Costo cero mensual",
+    "Resiste clima","Gestión local","Despliegue rápido",
+]
+c2 = criterios + [criterios[0]]
+
+data_sol = {
+    "Nodo solar comunitario": ([5,5,5,4,5,5], C_GREEN),
+    "Internet convencional":  ([1,2,1,2,1,2], C_RED),
+    "Fibra óptica rural":     ([3,5,2,3,2,1], C_BLUE),
+}
+
+fig_rad = go.Figure()
+for nombre, (vals, color) in data_sol.items():
+    v2 = vals + [vals[0]]
+    fig_rad.add_trace(go.Scatterpolar(
+        r=v2, theta=c2, fill="toself", name=nombre,
+        line=dict(color=color, width=2.2),
+        fillcolor=hex_rgba(color, 0.13),
+        hovertemplate="<b>"+nombre+"</b><br>%{theta}: %{r}/5<extra></extra>",
+    ))
+
+fig_rad.update_layout(
+    **L(margin=dict(l=35, r=35, t=20, b=65)),
+    polar=dict(
+        radialaxis=dict(
+            visible=True, range=[0,5], tickvals=[1,2,3,4,5],
+            tickfont=dict(size=8), gridcolor="#e2e8f0", linecolor="#e2e8f0",
+        ),
+        angularaxis=dict(tickfont=dict(size=9.5)),
+        bgcolor=BG,
+    ),
+    legend=dict(
+        orientation="h", yanchor="bottom", y=-0.18,
+        xanchor="center", x=0.5, font=dict(size=10),
+    ),
+)
+
+fig_rad
+```
+
+## Column {width="32%"}
+
+### Row {height="16%"}
+
+```{python}
+#| content: valuebox
+#| title: "Comunidades potenciales"
+dict(icon="house-heart", color="success", value="3,200 +")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Fase 1 — estados"
+dict(icon="geo-alt", color="danger", value="Chis · Oax · Gro")
+```
+
+### Row {height="84%"}
+
+```{python}
+#| title: "Contenido curado · 500 GB sin internet externo"
+
+contenido = pd.DataFrame({
+    "categoria": ["Libros SEP","Khan Academy","Wikipedia",
+                  "Salud","Lenguas indígenas","Capacitación"],
+    "gb": [150, 125, 100, 50, 40, 35],
+})
+
+fig_don = go.Figure(go.Pie(
+    labels=contenido["categoria"],
+    values=contenido["gb"],
+    hole=0.48,
+    marker=dict(
+        colors=[C_GREEN,"#22c55e","#86efac","#fbbf24","#f97316",C_RED],
+        line=dict(color="white", width=2),
+    ),
+    textinfo="percent",
+    textfont=dict(size=10),
+    hovertemplate="<b>%{label}</b><br>%{value} GB · %{percent}<extra></extra>",
+    direction="clockwise", sort=False,
+))
+fig_don.update_layout(
+    **L(margin=dict(l=0, r=120, t=20, b=20)),
+    showlegend=True,
+    legend=dict(
+        orientation="v", yanchor="middle", y=0.5,
+        xanchor="left", x=1.02, font=dict(size=9),
+    ),
+    annotations=[dict(
+        text="<b>500 GB</b>", x=0.5, y=0.5,
+        font=dict(size=13, color="#1e293b"),
+        showarrow=False, xanchor="center", yanchor="middle",
+    )],
+)
+
+fig_don
+```
+
+## Column {width="28%"}
+
+::: {.callout-important icon=false}
+## Acto IV · Construir Puentes
+
+El diagnóstico duele, pero no tiene por qué ser una sentencia permanente. La respuesta técnica existe: **el Nodo Solar Comunitario**.
+
+Un servidor local alimentado por paneles solares que funciona como **biblioteca digital sin internet externo**. Sin costo mensual. Sin dependencia de señal. Sin contenido basura.
+:::
+
+::: {.callout-tip icon=false}
+## La propuesta técnica
+
+**¿Por qué sin internet total?**
+
+El acceso externo requiere ancho de banda que no existe, genera costos recurrentes insostenibles y abre la puerta a contenido inapropiado. El nodo solo accede a su **almacenamiento local curado**: libros de texto SEP, Khan Academy offline, Wikipedia, recursos de salud e idiomas indígenas.
+
+**Resultado:** educación autónoma, resiliente y comunitaria a **$45,000 MXN por nodo**.
+:::
+
+::: {.callout-note icon=false}
+## ODS 17 · Alianzas para los objetivos
+
+Ningún municipio ni gobierno local puede resolver esto solo. Se requieren **alianzas estratégicas** entre universidades, gobierno federal, iniciativa privada y comunidades para diseñar, subsidiar, instalar y operar los nodos.
+
+**Fuentes:** Naciones Unidas (2015) · CONEVAL (2020) · INEGI ENDUTIH 2024
+:::
