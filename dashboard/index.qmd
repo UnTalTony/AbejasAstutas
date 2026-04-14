@@ -1,6 +1,6 @@
 ---
 title: "Desconectados"
-subtitle: "El verdadero costo de estudiar en el suroeste de México · Una crisis de infraestructura que sentencia el futuro educativo "
+subtitle: "El verdadero costo de estudiar en el suroeste de México "
 author: "Abejas Astutas"
 format:
   dashboard:
