@@ -1,6 +1,5 @@
 ---
-title: "Desconectados"
-subtitle: "El verdadero costo de estudiar en el suroeste de México "
+title: "Desconectados | El verdadero costo de estudiar en el suroeste de México "
 author: "Abejas Astutas"
 format:
   dashboard:
