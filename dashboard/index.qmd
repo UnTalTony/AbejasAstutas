@@ -1,6 +1,10 @@
 ---
 title: "Desconectados"
+<<<<<<< HEAD
 subtitle: "El verdadero costo de estudiar en el suroeste de México "
+=======
+subtitle: "El verdadero costo de estudiar en el suroeste de México"
+>>>>>>> 95ffc7e0a2584c4a39f2230c580f4cf09000c364
 author: "Abejas Astutas"
 format:
   dashboard:
