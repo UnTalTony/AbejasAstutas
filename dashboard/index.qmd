@@ -626,7 +626,7 @@ fig_don
 ::: {.callout-important icon=false}
 ## Construir Puentes
 
-A pesar quue la constitución mexicana ya reconoce el acceso a tecnologias de la información y comunicación (TIC) como un dereccho fundamental, persisten las brechas significativas.
+A pesar que la constitución mexicana ya reconoce el acceso a tecnologias de la información y comunicación (TIC) como un derecho fundamental, persisten las brechas significativas.
 
 El diagnóstico duele, pero no tiene por qué ser una sentencia permanente. La respuesta técnica existe: **el Nodo Solar Comunitario**.
 
