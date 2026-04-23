@@ -1,5 +1,5 @@
 ---
-title: "Desconectados · El verdadero costo de estudiar en el suroeste de México"
+title: "Desconectados    -    El verdadero costo de estudiar en el suroeste de México"
 author: "Abejas Astutas"
 format:
   dashboard:
@@ -113,7 +113,8 @@ NOR_TIT = round(estados[estados["CVE_ENT"].isin([2,5,19])]["titulados_pct"].mean
 
 **I · La Lotería Geográfica**
 
-## Row {height="110px"}
+
+## Row {height="80px"}
 
 ```{python}
 #| content: valuebox
@@ -165,9 +166,10 @@ for i, (label, col, cscale, rev, hover_lbl) in enumerate(metricas):
             colorscale=cscale, reversescale=rev,
             cmin=mn, cmax=mx, showscale=True,
             colorbar=dict(
-                title=dict(text=label, font=dict(size=FMED)),
-                thickness=12, len=0.55, x=1.01, xanchor="left",
+                title=dict(text=label, font=dict(size=FMED), side="right"),
+                thickness=14, len=0.65, x=1.00, xanchor="left",
                 y=0.5, yanchor="middle", tickfont=dict(size=FSML), outlinewidth=0,
+                tickformat=".0f", ticksuffix="%",
             ),
             line=dict(color="#e2e8f0", width=0.6), opacity=0.88,
         ),
@@ -183,14 +185,14 @@ for i, (label, *_) in enumerate(metricas):
     buttons.append(dict(label=label, method="update", args=[{"visible": vis}]))
 
 fig_map.update_layout(
-    **L(margin=dict(l=0, r=110, t=90, b=30)),
+    **L(margin=dict(l=0, r=0, t=0, b=0), height=360),
     updatemenus=[dict(
         type="buttons", buttons=buttons,
         direction="down", showactive=True, active=0,
-        bgcolor="#f8fafc", bordercolor="#e2e8f0", borderwidth=1,
-        font=dict(size=18, family=FONT),
-        x=0.0, xanchor="left", y=1.18, yanchor="top",
-        pad=dict(b=6, t=6, r=60, l=12),
+        bgcolor="rgba(248,250,252,0.85)", bordercolor="#e2e8f0", borderwidth=1,
+        font=dict(size=16, family=FONT),
+        x=0.01, xanchor="left", y=0.97, yanchor="top",
+        pad=dict(b=6, t=6, r=12, l=12),
     )],
     legend=dict(
         orientation="h", yanchor="top", y=-0.05,
@@ -217,22 +219,22 @@ En México, el lugar donde naces determina a qué oportunidades tienes acceso. U
 
 No es un problema de esfuerzo. Es un problema de código postal.
 
-- **Chiapas:** casi 1 de cada 2 hogares sin internet
-- **Guerrero:** 2 de cada 5 sin internet
-- **Oaxaca:** casi 1 de cada 2 sin internet
+- **Chiapas:** casi 5 de cada 10 hogares sin internet
+- **Guerrero:** 4 de cada 10 sin internet
+- **Oaxaca:** casi 5 de cada 10 sin internet
 :::
+![](infraestructura.jpeg){width="100%" style="border-radius:12px; object-fit:cover; max-height:220px; display:block; margin:0.8rem auto;"}
 
 ::: {.callout-note title="¿Por qué importa?" icon=false}
-Los estados con menor conectividad coinciden con los de mayor pobreza y marginación histórica. El mapa puede verse en tres capas: brecha digital, pobreza extrema y calidad educativa. El patrón es el mismo en las tres.
+Los estados con menor conectividad coinciden con los de mayor pobreza y marginación. El mapa puede verse en tres capas: brecha digital, pobreza extrema y calidad educativa. El patrón es el mismo en las tres.
 :::
+
 
 ## Banner s2 {.section-break .s2 height="90px"}
 
 **II · La Raíz del Problema**
 
-## Row
-
-### Column {width="24%"}
+## Row {height="80px"}
 
 ```{python}
 #| content: valuebox
@@ -252,24 +254,23 @@ dict(icon="bar-chart", color="info", value=f"{NAC_EXT_PCT:.1f} %")
 dict(icon="people", color="warning", value=f"{SUR_EXT_ABS/1e6:.1f} M")
 ```
 
-### Column {width="44%"}
+## Row
 
+### Column {width="15%"}
 
-
-
-### Column {width="32%"}
+### Column {width="70%"}
 
 ::: {.callout-important title="Cuando el internet es un lujo" icon=false}
-Para una familia que vive con lo mínimo para comer, pagar internet no está en la conversación. Pero el problema va más allá del dinero.
-
-En muchas comunidades del suroeste no existen las torres de señal ni la fibra óptica necesarias para conectarse. Sin esa infraestructura, ningún subsidio puede resolver la brecha.
+Para una familia que vive con lo mínimo para comer, pagar internet no está en la conversación. Pero el problema va más allá del dinero. En muchas comunidades no existen las torres de señal ni la fibra óptica necesarias para conectarse.
 :::
+
+![](Pobreza.jpeg){width="100%" style="border-radius:12px; object-fit:cover; max-height:220px; display:block; margin:0.8rem auto;"}
 
 ::: {.callout-warning title="El ciclo que se perpetúa" icon=false}
-En Chiapas, el **74.4 %** de la población vive en pobreza. Sin internet, sus hijos estudiarán en desventaja. Sin título, tendrán empleos de menor ingreso. Y la siguiente generación comenzará desde el mismo punto.
-
-Romper ese ciclo requiere actuar en ambos frentes: infraestructura digital **y** reducción de la pobreza.
+En Chiapas, el **74.4 %** de la población vive en pobreza. Sin internet, sus hijos estudiarán en desventaja. Sin título, tendrán empleos de menor ingreso. Y la siguiente generación comenzará desde el mismo punto. Romper ese ciclo requiere actuar en ambos frentes: infraestructura digital **y** reducción de la pobreza.
 :::
+
+### Column {width="15%"}
 
 ## Banner s3 {.section-break .s3 height="90px"}
 
@@ -277,27 +278,7 @@ Romper ese ciclo requiere actuar en ambos frentes: infraestructura digital **y**
 
 ## Row
 
-### Column {width="24%"}
-
-```{python}
-#| content: valuebox
-#| title: "Titulados MS · Suroeste"
-dict(icon="x-circle", color="danger", value=f"{SUR_TIT:.1f} %")
-```
-
-```{python}
-#| content: valuebox
-#| title: "Titulados MS · Nacional"
-dict(icon="mortarboard", color="info", value=f"{NAC_TIT:.1f} %")
-```
-
-```{python}
-#| content: valuebox
-#| title: "Titulados MS · Norte"
-dict(icon="patch-check", color="success", value=f"{NOR_TIT:.1f} %")
-```
-
-### Column {width="48%"}
+### Column {width="64%"}
 
 ```{python}
 #| title: "Conexión a internet y calidad educativa — ENDUTIH 2024 + SEP 2023-24"
@@ -337,7 +318,7 @@ fig_sc.add_trace(go.Scatter(
     hovertemplate="<b>%{text}</b> — Estado prioritario<extra></extra>",
 ))
 fig_sc.update_layout(
-    **L(margin=dict(l=20, r=20, t=30, b=50)),
+    **L(margin=dict(l=20, r=20, t=30, b=50), height=320),
     xaxis=dict(tickfont=dict(size=FSML), ticksuffix="%"),
     yaxis=dict(tickfont=dict(size=FSML), ticksuffix="%"),
     showlegend=True,
@@ -351,7 +332,25 @@ fig_sc.update_layout(
 fig_sc
 ```
 
-### Column {width="28%"}
+### Column {width="18%"}
+
+```{python}
+#| content: valuebox
+#| title: "Titulados MS · Suroeste"
+dict(icon="x-circle", color="danger", value=f"{SUR_TIT:.1f} %")
+```
+::
+ola mundo
+::
+
+
+### Column {width="18%"}
+
+```{python}
+#| content: valuebox
+#| title: "Titulados MS · Norte"
+dict(icon="patch-check", color="success", value=f"{NOR_TIT:.1f} %")
+```
 
 ::: {.callout-important title="El dato que no puede ignorarse" icon=false}
 De cada 100 jóvenes que terminan el bachillerato en el suroeste, **menos de 6 obtienen su título oficial**. En el norte llegan a 17. En el promedio nacional, 12 de cada 100.
@@ -423,7 +422,7 @@ fig_don = go.Figure(go.Pie(
     direction="clockwise", sort=False, showlegend=False,
 ))
 fig_don.update_layout(
-    **L(margin=dict(l=10, r=10, t=20, b=20)),
+    **L(margin=dict(l=10, r=10, t=20, b=20), height=300),
     showlegend=False,
     annotations=[dict(
         text="<b>500 GB</b><br>sin internet", x=0.5, y=0.5,

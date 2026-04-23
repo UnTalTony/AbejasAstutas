@@ -1,5 +1,5 @@
 /*-- scss:defaults --*/
-$font-size-base: 0.95rem;
+$font-size-base: 0.82rem;
 
 /*-- scss:rules --*/
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
@@ -32,7 +32,8 @@ body, .dashboard-body, .quarto-dashboard {
   background: var(--c-bg) !important;
   color: var(--c-text) !important;
   font-family: "Nunito", system-ui, sans-serif !important;
-  line-height: 1.65 !important;
+  line-height: 1.55 !important;
+  font-size: 0.82rem !important;
 }
 
 /* ── Navbar ──────────────────────────────────────────────────────────── */
@@ -43,23 +44,21 @@ body, .dashboard-body, .quarto-dashboard {
 }
 .navbar-brand, .navbar-title {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 1.05rem !important;
+  font-size: 0.84rem !important;
   font-weight: 700 !important;
   color: #ffffff !important;
 }
 .navbar .nav-link { color: #93c5fd !important; }
 
 /* ── BANNERS DE SECCIÓN ──────────────────────────────────────────────── */
-/* Uso en QMD: ## Texto {.section-break .sX height="90px"}               */
-/* Card sin header → solo body con texto centrado                        */
-/* Margen lateral amplio → el cuadrado queda centrado sin tocar bordes  */
+/* margin lateral ~28% → el banner ocupa ~44% del ancho (un cuarto menos) */
 .section-break .card {
   border: none !important;
   border-radius: 16px !important;
   box-shadow:
-    0 4px 20px rgba(0,0,0,0.09),
-    0 1px 4px  rgba(0,0,0,0.05) !important;
-  margin: 0.3rem 20% !important;          /* espacio lateral para que flote */
+    0 4px 20px rgba(0,0,0,0.12),
+    0 1px 4px  rgba(0,0,0,0.06) !important;
+  margin: 0.3rem 28% !important;
   height: calc(100% - 0.6rem) !important;
 }
 .section-break .card-header { display: none !important; }
@@ -67,59 +66,61 @@ body, .dashboard-body, .quarto-dashboard {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 0.7rem 2.5rem !important;
+  padding: 0.6rem 2rem !important;
 }
 .section-break .card-body p {
   margin: 0 !important;
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 2.5rem !important;          /* más grande que antes */
+  font-size: 1.55rem !important;
   font-weight: 700 !important;
+  color: #ffffff !important;           /* texto blanco en todos los banners */
   text-align: center !important;
   line-height: 1.2 !important;
   letter-spacing: 0.01em !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.25) !important;
 }
-.section-break .card-body p strong { font-weight: 800 !important; }
+.section-break .card-body p strong {
+  font-weight: 800 !important;
+  color: #ffffff !important;
+}
 
-/* Gradientes PASTELES por sección + texto oscuro de la misma familia */
+/* Gradientes por sección */
 .section-break.s1 .card {
-  background: linear-gradient(135deg, #bfdbfe 0%, #e0f2fe 100%) !important;
+  background: linear-gradient(135deg, #2982ef 0%, #56aae2 100%) !important;
 }
-.section-break.s1 .card-body p,
-.section-break.s1 .card-body p strong { color: #1e3a8a !important; }
-
 .section-break.s2 .card {
-  background: linear-gradient(135deg, #fed7aa 0%, #fef9c3 100%) !important;
+  background: linear-gradient(135deg, #f4ae5e 0%, #e7d512 100%) !important;
 }
-.section-break.s2 .card-body p,
-.section-break.s2 .card-body p strong { color: #78350f !important; }
-
 .section-break.s3 .card {
-  background: linear-gradient(135deg, #fecaca 0%, #ffe4e6 100%) !important;
+  background: linear-gradient(135deg, #ff5b5b 0%, #d20f1c 100%) !important;
 }
-.section-break.s3 .card-body p,
-.section-break.s3 .card-body p strong { color: #7f1d1d !important; }
-
 .section-break.s4 .card {
   background: linear-gradient(135deg, #a7f3d0 0%, #d1fae5 100%) !important;
 }
+/* s4 usa verde oscuro para el texto porque el fondo es pastel claro */
 .section-break.s4 .card-body p,
-.section-break.s4 .card-body p strong { color: #064e3b !important; }
+.section-break.s4 .card-body p strong {
+  color: #064e3b !important;
+  text-shadow: none !important;
+}
 
 /* ── Callouts ────────────────────────────────────────────────────────── */
 .callout {
   border-radius: 10px !important;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
   margin-bottom: 0.9rem !important;
-  padding: 0.9rem 1.1rem !important;
+  padding: 1rem 1.2rem !important;
   background: var(--c-white) !important;
   font-family: "Nunito", system-ui, sans-serif !important;
-  font-size: 0.92em !important;
+  font-size: 0.84em !important;
 }
 .callout-title {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 0.98rem !important;
+  font-size: 0.82rem !important;
   font-weight: 700 !important;
 }
+.callout-body p { font-size: 0.80rem !important; line-height: 1.55 !important; }
+
 .callout-important {
   border-top: 4px solid var(--c-red) !important;
   border-left-color: var(--c-red) !important;
@@ -149,7 +150,7 @@ body, .dashboard-body, .quarto-dashboard {
 }
 .bslib-value-box .value-box-title {
   font-family: "Nunito", sans-serif !important;
-  font-size: 0.74rem !important;
+  font-size: 0.58rem !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.06em !important;
@@ -157,7 +158,7 @@ body, .dashboard-body, .quarto-dashboard {
 }
 .bslib-value-box .value-box-value {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 1.85rem !important;
+  font-size: 1.1rem !important;
   font-weight: 700 !important;
 }
 .bslib-value-box.bg-danger  { background: linear-gradient(135deg, #ef4444, #f87171) !important; color: #fff !important; }
@@ -177,7 +178,7 @@ body, .dashboard-body, .quarto-dashboard {
   border-bottom: none !important;
   border-radius: 10px 10px 0 0 !important;
   font-family: "Nunito", sans-serif !important;
-  font-size: 0.78rem !important;
+  font-size: 0.68rem !important;
   font-weight: 700 !important;
   color: #e0f2fe !important;
   text-transform: uppercase !important;
@@ -187,9 +188,9 @@ body, .dashboard-body, .quarto-dashboard {
 
 /* ── Responsive móvil ────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .section-break .card   { margin: 0.3rem 3% !important; }
-  .section-break .card-body p { font-size: 1.15rem !important; }
-  .bslib-value-box .value-box-value { font-size: 1.45rem !important; }
-  .bslib-value-box .value-box-title { font-size: 0.67rem !important; }
-  .card-header { font-size: 0.72rem !important; }
+  .section-break .card   { margin: 0.3rem 5% !important; }
+  .section-break .card-body p { font-size: 0.88rem !important; }
+  .bslib-value-box .value-box-value { font-size: 0.9rem !important; }
+  .bslib-value-box .value-box-title { font-size: 0.52rem !important; }
+  .card-header { font-size: 0.62rem !important; }
 }
