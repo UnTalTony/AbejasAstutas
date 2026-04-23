@@ -1,186 +1,195 @@
 /*-- scss:defaults --*/
-
-$primary:            #1d4ed8;
-$secondary:          #64748b;
-$success:            #15803d;
-$info:               #0369a1;
-$warning:            #92400e;
-$danger:             #991b1b;
-$light:              #f8fafc;
-$dark:               #0f172a;
-
-$font-family-sans-serif: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-$font-size-base:         0.875rem;
-$line-height-base:       1.7;
-$headings-font-weight:   700;
-$border-radius:          8px;
-$card-border-radius:     10px;
-$card-cap-bg:            #f8fafc;
-$card-border-color:      rgba(0, 0, 0, 0.07);
+$font-size-base: 0.95rem;
 
 /*-- scss:rules --*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
 
-/* ── Navbar ─────────────────────────────────────────── */
-.navbar {
-  background: linear-gradient(135deg, #0f2744 0%, #14532d 100%) !important;
-  padding: 0.42rem 1.5rem;
-  box-shadow: 0 2px 14px rgba(0,0,0,0.2);
-}
-.navbar-brand {
-  font-weight: 800;
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
-  color: #fff !important;
-}
-.navbar-nav .nav-link {
-  color: rgba(255,255,255,0.8) !important;
-  font-size: 0.78rem;
-  font-weight: 600;
-  padding: 0.28rem 0.8rem !important;
-  border-radius: 5px;
-  letter-spacing: 0.02em;
-  transition: background 0.15s;
-}
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-link.active {
-  background: rgba(255,255,255,0.14) !important;
-  color: #fff !important;
+/* ══════════════════════════════════════════════════════════════════════
+   SISTEMA DE COLOR — mismo significado en todo el tablero
+   ─────────────────────────────────────────────────────────────────────
+   --c-red   (#f87171) → Suroeste crítico  (Chiapas · Guerrero · Oaxaca)
+   --c-amber (#fbbf24) → En desarrollo     (internet 65–78 %)
+   --c-green (#4ade80) → Mayor conectividad / Norte / Nodo solar
+   --c-blue  (#60a5fa) → Referencia nacional
+   --c-navy  (#1e3a5f) → Estructura: encabezados y anillos de énfasis
+   ══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --c-red:    #f87171;
+  --c-amber:  #fbbf24;
+  --c-green:  #4ade80;
+  --c-blue:   #60a5fa;
+  --c-navy:   #1e3a5f;
+  --c-text:   #1a1a2e;
+  --c-bg:     #f8fafc;
+  --c-white:  #ffffff;
+  --c-border: #e2e8f0;
+  --c-muted:  #94a3b8;
 }
 
-/* ── Título principal ───────────────────────────────── */
-.quarto-title-block .title {
-  font-size: 1.65rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  color: #0f172a;
-  line-height: 1.2;
-}
-.quarto-title-block .subtitle {
-  font-size: 0.82rem;
-  color: #475569;
-  font-weight: 400;
-  font-style: italic;
-  margin-top: 0.3rem;
+/* ── Tipografía base ─────────────────────────────────────────────────── */
+body, .dashboard-body, .quarto-dashboard {
+  background: var(--c-bg) !important;
+  color: var(--c-text) !important;
+  font-family: "Nunito", system-ui, sans-serif !important;
+  line-height: 1.65 !important;
 }
 
-/* ── Value boxes — compactos ────────────────────────── */
-.value-box {
-  border-radius: 8px !important;
-  border: none !important;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.07) !important;
+/* ── Navbar ──────────────────────────────────────────────────────────── */
+.navbar, .quarto-dashboard .navbar {
+  background: var(--c-navy) !important;
+  border-bottom: 3px solid var(--c-blue) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
 }
-.value-box .value-box-grid {
-  padding: 0.4rem 0.85rem !important;
-  min-height: unset !important;
-}
-.value-box-title {
-  font-size: 0.6rem !important;
-  font-weight: 600 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.88;
-  margin-bottom: 0.08rem !important;
-  line-height: 1.2 !important;
-}
-.value-box-value {
-  font-size: 1.3rem !important;
+.navbar-brand, .navbar-title {
+  font-family: "Merriweather", Georgia, serif !important;
+  font-size: 1.05rem !important;
   font-weight: 700 !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.01em;
+  color: #ffffff !important;
 }
-.value-box-showcase {
-  font-size: 1.2rem !important;
-  padding: 0 0.5rem !important;
-}
+.navbar .nav-link { color: #93c5fd !important; }
 
-/* ── Cards ──────────────────────────────────────────── */
-.card {
-  border: 1px solid rgba(0,0,0,0.065) !important;
-  border-radius: $card-border-radius !important;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.045) !important;
-  transition: box-shadow 0.2s ease;
+/* ── BANNERS DE SECCIÓN ──────────────────────────────────────────────── */
+/* Uso en QMD: ## Texto {.section-break .sX height="90px"}               */
+/* Card sin header → solo body con texto centrado                        */
+/* Margen lateral amplio → el cuadrado queda centrado sin tocar bordes  */
+.section-break .card {
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.09),
+    0 1px 4px  rgba(0,0,0,0.05) !important;
+  margin: 0.3rem 20% !important;          /* espacio lateral para que flote */
+  height: calc(100% - 0.6rem) !important;
 }
-.card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.09) !important;
+.section-break .card-header { display: none !important; }
+.section-break .card-body {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.7rem 2.5rem !important;
 }
-.card-header {
-  background: #f8fafc !important;
-  font-weight: 600;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #475569 !important;
-  border-bottom: 1px solid rgba(0,0,0,0.055) !important;
-  padding: 0.45rem 1rem !important;
+.section-break .card-body p {
+  margin: 0 !important;
+  font-family: "Merriweather", Georgia, serif !important;
+  font-size: 2.5rem !important;          /* más grande que antes */
+  font-weight: 700 !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.01em !important;
 }
+.section-break .card-body p strong { font-weight: 800 !important; }
 
-/* ── Callouts — estilo "pull quote" editorial ───────── */
+/* Gradientes PASTELES por sección + texto oscuro de la misma familia */
+.section-break.s1 .card {
+  background: linear-gradient(135deg, #bfdbfe 0%, #e0f2fe 100%) !important;
+}
+.section-break.s1 .card-body p,
+.section-break.s1 .card-body p strong { color: #1e3a8a !important; }
+
+.section-break.s2 .card {
+  background: linear-gradient(135deg, #fed7aa 0%, #fef9c3 100%) !important;
+}
+.section-break.s2 .card-body p,
+.section-break.s2 .card-body p strong { color: #78350f !important; }
+
+.section-break.s3 .card {
+  background: linear-gradient(135deg, #fecaca 0%, #ffe4e6 100%) !important;
+}
+.section-break.s3 .card-body p,
+.section-break.s3 .card-body p strong { color: #7f1d1d !important; }
+
+.section-break.s4 .card {
+  background: linear-gradient(135deg, #a7f3d0 0%, #d1fae5 100%) !important;
+}
+.section-break.s4 .card-body p,
+.section-break.s4 .card-body p strong { color: #064e3b !important; }
+
+/* ── Callouts ────────────────────────────────────────────────────────── */
 .callout {
-  border-radius: 9px !important;
-  border-left-width: 4px !important;
-  font-size: 0.85rem;
-  line-height: 1.75;
-  margin-bottom: 1rem !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
+  margin-bottom: 0.9rem !important;
   padding: 0.9rem 1.1rem !important;
-}
-.callout-important {
-  border-left-color: #c0392b !important;
-  background: #fff5f5 !important;
-}
-.callout-warning {
-  border-left-color: #d97706 !important;
-  background: #fffbeb !important;
-}
-.callout-note {
-  border-left-color: #1d4ed8 !important;
-  background: #eff6ff !important;
-}
-.callout-tip {
-  border-left-color: #15803d !important;
-  background: #f0fdf4 !important;
+  background: var(--c-white) !important;
+  font-family: "Nunito", system-ui, sans-serif !important;
+  font-size: 0.92em !important;
 }
 .callout-title {
+  font-family: "Merriweather", Georgia, serif !important;
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+}
+.callout-important {
+  border-top: 4px solid var(--c-red) !important;
+  border-left-color: var(--c-red) !important;
+}
+.callout-important .callout-title { color: #991b1b !important; }
+.callout-warning {
+  border-top: 4px solid var(--c-amber) !important;
+  border-left-color: var(--c-amber) !important;
+}
+.callout-warning .callout-title { color: #78350f !important; }
+.callout-note {
+  border-top: 4px solid var(--c-blue) !important;
+  border-left-color: var(--c-blue) !important;
+}
+.callout-note .callout-title { color: #1e3a8a !important; }
+.callout-tip {
+  border-top: 4px solid var(--c-green) !important;
+  border-left-color: var(--c-green) !important;
+}
+.callout-tip .callout-title { color: #14532d !important; }
+
+/* ── Value boxes ─────────────────────────────────────────────────────── */
+.bslib-value-box {
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+  border: none !important;
+}
+.bslib-value-box .value-box-title {
+  font-family: "Nunito", sans-serif !important;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  opacity: 0.88 !important;
+}
+.bslib-value-box .value-box-value {
+  font-family: "Merriweather", Georgia, serif !important;
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+}
+.bslib-value-box.bg-danger  { background: linear-gradient(135deg, #ef4444, #f87171) !important; color: #fff !important; }
+.bslib-value-box.bg-warning { background: linear-gradient(135deg, #d97706, #fbbf24) !important; color: #fff !important; }
+.bslib-value-box.bg-info    { background: linear-gradient(135deg, #2563eb, #60a5fa) !important; color: #fff !important; }
+.bslib-value-box.bg-success { background: linear-gradient(135deg, #16a34a, #4ade80) !important; color: #fff !important; }
+
+/* ── Tarjetas de gráficas ────────────────────────────────────────────── */
+.card {
+  border: 1px solid var(--c-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  background: var(--c-white) !important;
+}
+.card-header, .card .card-header {
+  background: var(--c-navy) !important;
+  border-bottom: none !important;
+  border-radius: 10px 10px 0 0 !important;
+  font-family: "Nunito", sans-serif !important;
   font-size: 0.78rem !important;
   font-weight: 700 !important;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem !important;
-}
-.callout p {
-  margin-bottom: 0.5rem;
-  font-size: 0.84rem;
-}
-.callout strong {
-  color: #0f172a;
+  color: #e0f2fe !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 0.5rem 1rem !important;
 }
 
-/* ── Blockquote dentro de callout ───────────────────── */
-blockquote {
-  border-left: 3px solid #c0392b;
-  padding: 0.4rem 0.9rem;
-  margin: 0.6rem 0;
-  background: rgba(192,57,43,0.05);
-  border-radius: 0 6px 6px 0;
-  font-style: italic;
-  font-size: 0.9rem;
-  color: #1e293b;
+/* ── Responsive móvil ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .section-break .card   { margin: 0.3rem 3% !important; }
+  .section-break .card-body p { font-size: 1.15rem !important; }
+  .bslib-value-box .value-box-value { font-size: 1.45rem !important; }
+  .bslib-value-box .value-box-title { font-size: 0.67rem !important; }
+  .card-header { font-size: 0.72rem !important; }
 }
-
-/* ── Tablas Markdown ────────────────────────────────── */
-.table { font-size: 0.79rem; }
-.table thead th {
-  font-weight: 600; color: #1e293b;
-  background: #f1f5f9;
-  border-bottom: 2px solid #cbd5e1 !important;
-  padding: 0.48rem 0.7rem;
-}
-.table tbody td {
-  padding: 0.38rem 0.7rem;
-  vertical-align: middle;
-  border-color: #f1f5f9 !important;
-}
-
-/* ── Scrollbar sutil ────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.16); border-radius: 3px; }
