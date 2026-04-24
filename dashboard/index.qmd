@@ -41,9 +41,9 @@ pio.renderers.default = "notebook"
 # C_MUTED (#94a3b8) → Elementos secundarios / otros estados
 # ──────────────────────────────────────────────────────────────────────
 # COLORES DE MÉTRICAS — solo en el gráfico de perfiles (Sección III)
-# M_INTERNET  (#7dd3fc) → conectividad      ← distintos de los
-# M_POBREZA   (#fb923c) → pobreza           ← colores regionales
-# M_TITULADOS (#c084fc) → calidad educativa ← para evitar confusión
+# M_INTERNET  (#7dd3fc) → conectividad
+# M_POBREZA   (#fb923c) → pobreza
+# M_TITULADOS (#c084fc) → calidad educativa
 # ══════════════════════════════════════════════════════════════════════
 C_RED   = "#f87171"
 C_AMBER = "#fbbf24"
@@ -58,9 +58,9 @@ M_TITULADOS = "#c084fc"
 
 FONT  = "Nunito, system-ui, sans-serif"
 BG    = "rgba(0,0,0,0)"
-FBASE = 14
-FMED  = 13
-FSML  = 12
+FBASE = 13
+FMED  = 12
+FSML  = 11
 
 def L(**ov):
     base = dict(
@@ -93,28 +93,24 @@ estados["region"] = estados["internet_pct"].apply(
     lambda x: "Suroeste crítico" if x < 65 else ("En desarrollo" if x < 78 else "Mayor conectividad")
 )
 
-# ── Sección I: brecha digital ─────────────────────────────────────────
-CHI_BRECHA = round(100 - estados.loc[estados["CVE_ENT"]==7,  "internet_pct"].values[0], 1)
-GRO_BRECHA = round(100 - estados.loc[estados["CVE_ENT"]==12, "internet_pct"].values[0], 1)
-OAX_BRECHA = round(100 - estados.loc[estados["CVE_ENT"]==20, "internet_pct"].values[0], 1)
+CHI_BRECHA  = round(100 - estados.loc[estados["CVE_ENT"]==7,  "internet_pct"].values[0], 1)
+GRO_BRECHA  = round(100 - estados.loc[estados["CVE_ENT"]==12, "internet_pct"].values[0], 1)
+OAX_BRECHA  = round(100 - estados.loc[estados["CVE_ENT"]==20, "internet_pct"].values[0], 1)
 
-# ── Sección II: pobreza extrema ───────────────────────────────────────
 SUR_EXT_PCT = round(estados[estados["CVE_ENT"].isin([7,12,20])]["pob_extrema_pct"].mean(), 1)
 NAC_EXT_PCT = round(estados["pob_extrema_pct"].mean(), 1)
 SUR_EXT_ABS = int(estados[estados["CVE_ENT"].isin([7,12,20])]["pob_extrema_abs"].sum())
 
-# ── Sección III: titulación ───────────────────────────────────────────
 SUR_TIT = round(estados[estados["CVE_ENT"].isin([7,12,20])]["titulados_pct"].mean(), 1)
 NAC_TIT = round(estados["titulados_pct"].mean(), 1)
 NOR_TIT = round(estados[estados["CVE_ENT"].isin([2,5,19])]["titulados_pct"].mean(), 1)
 ```
 
-## Banner s1 {.section-break .s1 height="90px"}
+## Banner s1 {.section-break .s1 height="110px"}
 
-**I · La Lotería Geográfica**
+¿Cómo la **falta de infraestructura digital** en el suroeste de México limita el **derecho a una educación de calidad**?
 
-
-## Row {height="80px"}
+## Row
 
 ```{python}
 #| content: valuebox
@@ -157,7 +153,7 @@ fig_map = go.Figure()
 for i, (label, col, cscale, rev, hover_lbl) in enumerate(metricas):
     vals  = estados[col].round(1).tolist()
     mn, mx = estados[col].min(), estados[col].max()
-    sizes = [12 + 24*(v-mn)/(mx-mn) for v in vals]
+    sizes = [10 + 20*(v-mn)/(mx-mn) for v in vals]
     fig_map.add_trace(go.Scattergeo(
         lat=estados["lat"].tolist(), lon=estados["lon"].tolist(),
         mode="markers",
@@ -167,11 +163,12 @@ for i, (label, col, cscale, rev, hover_lbl) in enumerate(metricas):
             cmin=mn, cmax=mx, showscale=True,
             colorbar=dict(
                 title=dict(text=label, font=dict(size=FMED), side="right"),
-                thickness=14, len=0.65, x=1.00, xanchor="left",
-                y=0.5, yanchor="middle", tickfont=dict(size=FSML), outlinewidth=0,
+                thickness=12, len=0.6, x=1.02, xanchor="left",
+                y=0.5, yanchor="middle",
+                tickfont=dict(size=FSML), outlinewidth=0,
                 tickformat=".0f", ticksuffix="%",
             ),
-            line=dict(color="#e2e8f0", width=0.6), opacity=0.88,
+            line=dict(color="#e2e8f0", width=0.5), opacity=0.88,
         ),
         text=estados["nombre"].tolist(), customdata=vals,
         hovertemplate="<b>%{text}</b><br>" + hover_lbl + ": <b>%{customdata:.1f}%</b><extra></extra>",
@@ -179,26 +176,24 @@ for i, (label, col, cscale, rev, hover_lbl) in enumerate(metricas):
     ))
 
 n = len(metricas)
+COLORES_BTN = ["#fecaca", "#fed7aa", "#bfdbfe"]
 buttons = []
 for i, (label, *_) in enumerate(metricas):
     vis = [False]*n + [True]; vis[i] = True
-    buttons.append(dict(label=label, method="update", args=[{"visible": vis}]))
+    buttons.append(dict(
+        label=label, method="update", args=[{"visible": vis}],
+    ))
 
 fig_map.update_layout(
-    **L(margin=dict(l=0, r=0, t=0, b=0), height=360),
+    **L(margin=dict(l=0, r=0, t=0, b=0), height=260),
     updatemenus=[dict(
         type="buttons", buttons=buttons,
         direction="down", showactive=True, active=0,
-        bgcolor="rgba(248,250,252,0.85)", bordercolor="#e2e8f0", borderwidth=1,
-        font=dict(size=16, family=FONT),
+        bgcolor="rgba(248,250,252,0.88)", bordercolor="#e2e8f0", borderwidth=1,
+        font=dict(size=13, family=FONT),
         x=0.01, xanchor="left", y=0.97, yanchor="top",
-        pad=dict(b=6, t=6, r=12, l=12),
+        pad=dict(b=5, t=5, r=10, l=10),
     )],
-    legend=dict(
-        orientation="h", yanchor="top", y=-0.05,
-        xanchor="left", x=0.0, font=dict(size=FSML),
-        bgcolor="rgba(255,255,255,0.85)", bordercolor="#e2e8f0", borderwidth=1,
-    ),
     geo=dict(
         scope="north america", showland=True, landcolor="#f1f5f9",
         showocean=True, oceancolor="#dbeafe",
@@ -223,18 +218,22 @@ No es un problema de esfuerzo. Es un problema de código postal.
 - **Guerrero:** 4 de cada 10 sin internet
 - **Oaxaca:** casi 5 de cada 10 sin internet
 :::
-![](infraestructura.jpeg){width="100%" style="border-radius:12px; object-fit:cover; max-height:220px; display:block; margin:0.8rem auto;"}
+
+![](infraestructura.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:190px; display:block; margin:0.6rem auto;"}
+
+*Fuente: [Facebook — publicación de referencia](https://www.facebook.com/share/p/1GZVURVcwn/){style="font-size:0.78rem; color:#64748b;"}*
 
 ::: {.callout-note title="¿Por qué importa?" icon=false}
 Los estados con menor conectividad coinciden con los de mayor pobreza y marginación. El mapa puede verse en tres capas: brecha digital, pobreza extrema y calidad educativa. El patrón es el mismo en las tres.
 :::
 
+## Banner s2 {.section-break .s2 height="80px"}
 
-## Banner s2 {.section-break .s2 height="90px"}
+**II** · La Raíz del Problema
 
-**II · La Raíz del Problema**
+## Row
 
-## Row {height="80px"}
+### Column {width="13%"}
 
 ```{python}
 #| content: valuebox
@@ -254,31 +253,27 @@ dict(icon="bar-chart", color="info", value=f"{NAC_EXT_PCT:.1f} %")
 dict(icon="people", color="warning", value=f"{SUR_EXT_ABS/1e6:.1f} M")
 ```
 
-## Row
-
-### Column {width="15%"}
-
-### Column {width="70%"}
+### Column {width="87%"}
 
 ::: {.callout-important title="Cuando el internet es un lujo" icon=false}
 Para una familia que vive con lo mínimo para comer, pagar internet no está en la conversación. Pero el problema va más allá del dinero. En muchas comunidades no existen las torres de señal ni la fibra óptica necesarias para conectarse.
 :::
 
-![](Pobreza.jpeg){width="100%" style="border-radius:12px; object-fit:cover; max-height:220px; display:block; margin:0.8rem auto;"}
+![](Pobreza.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:500px; display:block; margin:0.6rem auto;"}
+
+*Imagen proporcionada por Jperez . Fuente: [Instagram — Jperez](https://www.instagram.com/p/DXfLOqzFhSp/?igsh=MThhc2d1M3NscWl2NQ==){style="font-size:0.78rem; color:#64748b;"}*
 
 ::: {.callout-warning title="El ciclo que se perpetúa" icon=false}
 En Chiapas, el **74.4 %** de la población vive en pobreza. Sin internet, sus hijos estudiarán en desventaja. Sin título, tendrán empleos de menor ingreso. Y la siguiente generación comenzará desde el mismo punto. Romper ese ciclo requiere actuar en ambos frentes: infraestructura digital **y** reducción de la pobreza.
 :::
 
-### Column {width="15%"}
+## Banner s3 {.section-break .s3 height="80px"}
 
-## Banner s3 {.section-break .s3 height="90px"}
-
-**III · El Costo en el Aula**
+**III** · El Costo en el Aula
 
 ## Row
 
-### Column {width="64%"}
+### Column {width="60%"}
 
 ```{python}
 #| title: "Conexión a internet y calidad educativa — ENDUTIH 2024 + SEP 2023-24"
@@ -292,7 +287,7 @@ fig_sc = px.scatter(
     color="region",
     color_discrete_map=COLOR_MAP,
     text="nombre",
-    size="personas_sin_internet", size_max=28,
+    size="personas_sin_internet", size_max=26,
     labels={
         "internet_pct":  "Hogares con internet (%)",
         "titulados_pct": "Egresados con título (%)",
@@ -313,17 +308,17 @@ fig_sc.update_traces(
 fig_sc.add_trace(go.Scatter(
     x=df_dest_sc["internet_pct"], y=df_dest_sc["titulados_pct"],
     mode="markers",
-    marker=dict(size=30, color="rgba(0,0,0,0)", line=dict(color=C_NAVY, width=2.5)),
+    marker=dict(size=28, color="rgba(0,0,0,0)", line=dict(color=C_NAVY, width=2.2)),
     text=df_dest_sc["nombre"], showlegend=False,
     hovertemplate="<b>%{text}</b> — Estado prioritario<extra></extra>",
 ))
 fig_sc.update_layout(
-    **L(margin=dict(l=20, r=20, t=30, b=50), height=320),
+    **L(margin=dict(l=20, r=20, t=20, b=65), height=290),
     xaxis=dict(tickfont=dict(size=FSML), ticksuffix="%"),
     yaxis=dict(tickfont=dict(size=FSML), ticksuffix="%"),
     showlegend=True,
     legend=dict(
-        orientation="h", yanchor="top", y=-0.10,
+        orientation="h", yanchor="top", y=-0.22,
         xanchor="center", x=0.5, font=dict(size=FSML),
         bgcolor="rgba(248,250,252,0.9)",
         bordercolor="#e2e8f0", borderwidth=1, title_text="",
@@ -332,19 +327,21 @@ fig_sc.update_layout(
 fig_sc
 ```
 
-### Column {width="18%"}
+### Column {width="20%"}
 
 ```{python}
 #| content: valuebox
 #| title: "Titulados MS · Suroeste"
 dict(icon="x-circle", color="danger", value=f"{SUR_TIT:.1f} %")
 ```
-::
-ola mundo
-::
 
+::: {.callout-important title="El dato que no puede ignorarse" icon=false}
+De cada 100 jóvenes que terminan el bachillerato en el suroeste, **menos de 6 obtienen su título oficial**. En el norte llegan a 17; nacional, 12 de cada 100.
 
-### Column {width="18%"}
+Sin título, la puerta a la universidad se cierra antes de tocarla.
+:::
+
+### Column {width="20%"}
 
 ```{python}
 #| content: valuebox
@@ -352,26 +349,17 @@ ola mundo
 dict(icon="patch-check", color="success", value=f"{NOR_TIT:.1f} %")
 ```
 
-::: {.callout-important title="El dato que no puede ignorarse" icon=false}
-De cada 100 jóvenes que terminan el bachillerato en el suroeste, **menos de 6 obtienen su título oficial**. En el norte llegan a 17. En el promedio nacional, 12 de cada 100.
-
-Sin título, la puerta a la universidad y a empleos bien remunerados se cierra antes de tocarla.
-:::
-
 ::: {.callout-note title="Sobre los datos" icon=false}
-**ENDUTIH 2024** (INEGI): 48,000+ hogares representativa a nivel nacional.
+**ENDUTIH 2024** (INEGI): 48,000+ hogares, representativa a nivel nacional.
 
 **CONEVAL 2020**: pobreza municipal, Censo de Población.
 
-**SEP 2023-24**: Media Superior únicamente. Los datos estatales promedian realidades muy distintas; en comunidades rurales e indígenas la situación es más grave.
+**SEP 2023-24**: Media Superior únicamente. En comunidades rurales e indígenas la situación es más grave.
 :::
 
-## Row
+## Banner s4 {.section-break .s4 height="80px"}
 
-
-## Banner s4 {.section-break .s4 height="90px"}
-
-**IV · Construir Puentes**
+**IV** · Construir Puentes
 
 ## Row
 
@@ -422,11 +410,11 @@ fig_don = go.Figure(go.Pie(
     direction="clockwise", sort=False, showlegend=False,
 ))
 fig_don.update_layout(
-    **L(margin=dict(l=10, r=10, t=20, b=20), height=300),
+    **L(margin=dict(l=10, r=10, t=15, b=15), height=270),
     showlegend=False,
     annotations=[dict(
         text="<b>500 GB</b><br>sin internet", x=0.5, y=0.5,
-        font=dict(size=14, color="#1a1a2e"),
+        font=dict(size=13, color="#1a1a2e"),
         showarrow=False, xanchor="center", yanchor="middle",
     )],
 )

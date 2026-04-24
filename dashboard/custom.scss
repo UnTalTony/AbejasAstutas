@@ -1,17 +1,16 @@
 /*-- scss:defaults --*/
-$font-size-base: 0.82rem;
+$font-size-base: 1.1rem;
 
 /*-- scss:rules --*/
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
 
 /* ══════════════════════════════════════════════════════════════════════
    SISTEMA DE COLOR — mismo significado en todo el tablero
-   ─────────────────────────────────────────────────────────────────────
-   --c-red   (#f87171) → Suroeste crítico  (Chiapas · Guerrero · Oaxaca)
-   --c-amber (#fbbf24) → En desarrollo     (internet 65–78 %)
-   --c-green (#4ade80) → Mayor conectividad / Norte / Nodo solar
-   --c-blue  (#60a5fa) → Referencia nacional
-   --c-navy  (#1e3a5f) → Estructura: encabezados y anillos de énfasis
+   C_RED   (#f87171) → Suroeste crítico
+   C_AMBER (#fbbf24) → En desarrollo
+   C_GREEN (#4ade80) → Mayor conectividad / Norte / Nodo solar
+   C_BLUE  (#60a5fa) → Referencia nacional
+   C_NAVY  (#1e3a5f) → Estructura
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -32,8 +31,8 @@ body, .dashboard-body, .quarto-dashboard {
   background: var(--c-bg) !important;
   color: var(--c-text) !important;
   font-family: "Nunito", system-ui, sans-serif !important;
-  line-height: 1.55 !important;
-  font-size: 0.82rem !important;
+  line-height: 1.65 !important;
+  font-size: 1.1rem !important;
 }
 
 /* ── Navbar ──────────────────────────────────────────────────────────── */
@@ -44,122 +43,166 @@ body, .dashboard-body, .quarto-dashboard {
 }
 .navbar-brand, .navbar-title {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 0.84rem !important;
+  font-size: 1.05rem !important;
   font-weight: 700 !important;
   color: #ffffff !important;
 }
 .navbar .nav-link { color: #93c5fd !important; }
 
-/* ── BANNERS DE SECCIÓN ──────────────────────────────────────────────── */
-/* margin lateral ~28% → el banner ocupa ~44% del ancho (un cuarto menos) */
+/* ── BANNERS DE SECCIÓN — píldora centrada con badge numérico ────────── */
+/* Estructura en QMD: **I** · Título de la sección                       */
+/* El <strong> → badge circular | el resto → texto del título            */
 .section-break .card {
   border: none !important;
-  border-radius: 16px !important;
-  box-shadow:
-    0 4px 20px rgba(0,0,0,0.12),
-    0 1px 4px  rgba(0,0,0,0.06) !important;
-  margin: 0.3rem 28% !important;
-  height: calc(100% - 0.6rem) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.18) !important;
+  margin: 0.35rem 26% !important;
+  height: calc(100% - 0.7rem) !important;
 }
 .section-break .card-header { display: none !important; }
 .section-break .card-body {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 0.6rem 2rem !important;
+  padding: 0.45rem 2.5rem !important;
 }
 .section-break .card-body p {
   margin: 0 !important;
-  font-family: "Merriweather", Georgia, serif !important;
-  font-size: 1.55rem !important;
-  font-weight: 700 !important;
-  color: #ffffff !important;           /* texto blanco en todos los banners */
-  text-align: center !important;
-  line-height: 1.2 !important;
-  letter-spacing: 0.01em !important;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.25) !important;
-}
-.section-break .card-body p strong {
-  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.7rem !important;
+  font-family: "Nunito", system-ui, sans-serif !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
   color: #ffffff !important;
+  line-height: 1 !important;
+  letter-spacing: 0.02em !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
 }
-
-/* Gradientes por sección */
-.section-break.s1 .card {
-  background: linear-gradient(135deg, #2982ef 0%, #56aae2 100%) !important;
+/* Badge circular para numerales II III IV */
+.section-break .card-body p strong {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 1.9rem !important;
+  height: 1.9rem !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,0.22) !important;
+  color: #ffffff !important;
+  font-size: 0.82rem !important;
+  font-weight: 800 !important;
+  flex-shrink: 0 !important;
+  letter-spacing: 0 !important;
 }
-.section-break.s2 .card {
-  background: linear-gradient(135deg, #f4ae5e 0%, #e7d512 100%) !important;
+/* Sección I — pregunta principal: tipografía diferente, sin badge */
+.section-break.s1 .card-body p {
+  font-family: "Merriweather", Georgia, serif !important;
+  font-size: 1.22rem !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  line-height: 1.45 !important;
+  letter-spacing: 0 !important;
+  display: block !important;
 }
-.section-break.s3 .card {
-  background: linear-gradient(135deg, #ff5b5b 0%, #d20f1c 100%) !important;
-}
-.section-break.s4 .card {
-  background: linear-gradient(135deg, #a7f3d0 0%, #d1fae5 100%) !important;
-}
-/* s4 usa verde oscuro para el texto porque el fondo es pastel claro */
-.section-break.s4 .card-body p,
-.section-break.s4 .card-body p strong {
-  color: #064e3b !important;
+.section-break.s1 .card-body p strong {
+  display: inline !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  font-size: inherit !important;
+  font-weight: 800 !important;
+  color: #93c5fd !important;
   text-shadow: none !important;
 }
+
+/* Colores de cada sección — se mantienen los gradientes originales */
+.section-break.s1 .card {
+  background: linear-gradient(135deg, #0f2952 0%, #1e3a8a 60%, #2563eb 100%) !important;
+  margin: 0.3rem 4% !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 28px rgba(30,58,138,0.35) !important;
+}
+.section-break.s2 .card { background: linear-gradient(135deg, #f4ae5e 0%, #e7d512 100%) !important; }
+.section-break.s3 .card { background: linear-gradient(135deg, #ff5b5b 0%, #d20f1c 100%) !important; }
+.section-break.s4 .card { background: linear-gradient(135deg, #34d399 0%, #059669 100%) !important; }
 
 /* ── Callouts ────────────────────────────────────────────────────────── */
 .callout {
   border-radius: 10px !important;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
-  margin-bottom: 0.9rem !important;
-  padding: 1rem 1.2rem !important;
+  margin-bottom: 0.75rem !important;
+  padding: 0.85rem 1.1rem !important;
   background: var(--c-white) !important;
   font-family: "Nunito", system-ui, sans-serif !important;
-  font-size: 0.84em !important;
+  font-size: 1.1em !important;
 }
 .callout-title {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 0.82rem !important;
+  font-size: 1.1rem !important;
   font-weight: 700 !important;
 }
-.callout-body p { font-size: 0.80rem !important; line-height: 1.55 !important; }
+.callout-body p { font-size: 1.1rem !important; line-height: 1.72 !important; }
 
-.callout-important {
-  border-top: 4px solid var(--c-red) !important;
-  border-left-color: var(--c-red) !important;
-}
+.callout-important { border-top: 4px solid var(--c-red)   !important; border-left-color: var(--c-red)   !important; }
 .callout-important .callout-title { color: #991b1b !important; }
-.callout-warning {
-  border-top: 4px solid var(--c-amber) !important;
-  border-left-color: var(--c-amber) !important;
-}
-.callout-warning .callout-title { color: #78350f !important; }
-.callout-note {
-  border-top: 4px solid var(--c-blue) !important;
-  border-left-color: var(--c-blue) !important;
-}
-.callout-note .callout-title { color: #1e3a8a !important; }
-.callout-tip {
-  border-top: 4px solid var(--c-green) !important;
-  border-left-color: var(--c-green) !important;
-}
-.callout-tip .callout-title { color: #14532d !important; }
+.callout-warning   { border-top: 4px solid var(--c-amber) !important; border-left-color: var(--c-amber) !important; }
+.callout-warning   .callout-title { color: #78350f !important; }
+.callout-note      { border-top: 4px solid var(--c-blue)  !important; border-left-color: var(--c-blue)  !important; }
+.callout-note      .callout-title { color: #1e3a8a !important; }
+.callout-tip       { border-top: 4px solid var(--c-green) !important; border-left-color: var(--c-green) !important; }
+.callout-tip       .callout-title { color: #14532d !important; }
 
-/* ── Value boxes ─────────────────────────────────────────────────────── */
+
+/* ── Texto de citas de imágenes ──────────────────────────────────────── */
+.card-body em, .card-body p em {
+  font-size: 0.68rem !important;
+  color: #94a3b8 !important;
+  line-height: 1.4 !important;
+}
+/* ── Value boxes — compactos ─────────────────────────────────────────── */
 .bslib-value-box {
   border-radius: 10px !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12) !important;
   border: none !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+/* Área del ícono — tamaño natural, sin recortar */
+.bslib-value-box .value-box-showcase {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 0.8rem 0 0.6rem !important;
+  flex-shrink: 0 !important;
+}
+.bslib-value-box .value-box-showcase .bi {
+  font-size: 1.5rem !important;
+}
+/* Área del texto — se adapta al contenido */
+.bslib-value-box .value-box-area {
+  padding: 0.55rem 0.7rem 0.55rem 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 0.1rem !important;
 }
 .bslib-value-box .value-box-title {
   font-family: "Nunito", sans-serif !important;
-  font-size: 0.58rem !important;
+  font-size: 0.62rem !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-  opacity: 0.88 !important;
+  letter-spacing: 0.07em !important;
+  opacity: 0.85 !important;
+  white-space: normal !important;
+  line-height: 1.2 !important;
 }
 .bslib-value-box .value-box-value {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 1.1rem !important;
+  font-size: 1.35rem !important;
   font-weight: 700 !important;
+  line-height: 1.15 !important;
+  white-space: nowrap !important;
 }
 .bslib-value-box.bg-danger  { background: linear-gradient(135deg, #ef4444, #f87171) !important; color: #fff !important; }
 .bslib-value-box.bg-warning { background: linear-gradient(135deg, #d97706, #fbbf24) !important; color: #fff !important; }
@@ -178,19 +221,19 @@ body, .dashboard-body, .quarto-dashboard {
   border-bottom: none !important;
   border-radius: 10px 10px 0 0 !important;
   font-family: "Nunito", sans-serif !important;
-  font-size: 0.68rem !important;
+  font-size: 0.78rem !important;
   font-weight: 700 !important;
   color: #e0f2fe !important;
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
-  padding: 0.5rem 1rem !important;
+  padding: 0.4rem 0.9rem !important;
 }
 
 /* ── Responsive móvil ────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .section-break .card   { margin: 0.3rem 5% !important; }
-  .section-break .card-body p { font-size: 0.88rem !important; }
-  .bslib-value-box .value-box-value { font-size: 0.9rem !important; }
-  .bslib-value-box .value-box-title { font-size: 0.52rem !important; }
-  .card-header { font-size: 0.62rem !important; }
+  .section-break .card { margin: 0.3rem 4% !important; }
+  .section-break .card-body p { font-size: 0.95rem !important; }
+  .bslib-value-box .value-box-value { font-size: 1.05rem !important; }
+  .bslib-value-box .value-box-title { font-size: 0.58rem !important; }
+  .card-header { font-size: 0.72rem !important; }
 }
