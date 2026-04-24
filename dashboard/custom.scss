@@ -131,18 +131,24 @@ body, .dashboard-body, .quarto-dashboard {
 .callout {
   border-radius: 10px !important;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
-  margin-bottom: 0.75rem !important;
-  padding: 0.85rem 1.1rem !important;
+  margin-bottom: 0.6rem !important;
+  padding: 0.7rem 0.95rem !important;
   background: var(--c-white) !important;
   font-family: "Nunito", system-ui, sans-serif !important;
-  font-size: 1.1em !important;
+  font-size: 1em !important;
 }
 .callout-title {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
   font-weight: 700 !important;
+  margin-bottom: 0.35rem !important;
 }
-.callout-body p { font-size: 1.1rem !important; line-height: 1.72 !important; }
+.callout-body p {
+  font-size: 0.98rem !important;
+  line-height: 1.55 !important;
+  margin-bottom: 0.4rem !important;
+}
+.callout-body p:last-child { margin-bottom: 0 !important; }
 
 .callout-important { border-top: 4px solid var(--c-red)   !important; border-left-color: var(--c-red)   !important; }
 .callout-important .callout-title { color: #991b1b !important; }
@@ -160,20 +166,31 @@ body, .dashboard-body, .quarto-dashboard {
   color: #94a3b8 !important;
   line-height: 1.4 !important;
 }
-/* ── Value boxes — compactos ─────────────────────────────────────────── */
+/* ── Value boxes — se estiran para llenar la altura de su columna ───── */
 .bslib-value-box {
   border-radius: 10px !important;
   box-shadow: 0 3px 10px rgba(0,0,0,0.12) !important;
   border: none !important;
+  min-height: 85px !important;
+  height: 100% !important;
+  flex: 1 1 auto !important;
+  margin-bottom: 0.4rem !important;
+}
+/* Propagar la altura al wrapper de la celda para que flex funcione */
+.cell-output-display:has(.bslib-value-box),
+.quarto-layout-cell:has(.bslib-value-box),
+div[class*="cell-output"]:has(.bslib-value-box) {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
   min-height: 0 !important;
-  height: auto !important;
 }
 /* Área del ícono — tamaño natural, sin recortar */
 .bslib-value-box .value-box-showcase {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 0 0.8rem 0 0.6rem !important;
+  padding: 0 0.7rem 0 0.55rem !important;
   flex-shrink: 0 !important;
 }
 .bslib-value-box .value-box-showcase .bi {
@@ -185,7 +202,7 @@ body, .dashboard-body, .quarto-dashboard {
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  gap: 0.1rem !important;
+  gap: 0.15rem !important;
 }
 .bslib-value-box .value-box-title {
   font-family: "Nunito", sans-serif !important;
@@ -193,13 +210,13 @@ body, .dashboard-body, .quarto-dashboard {
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.07em !important;
-  opacity: 0.85 !important;
+  opacity: 0.88 !important;
   white-space: normal !important;
   line-height: 1.2 !important;
 }
 .bslib-value-box .value-box-value {
   font-family: "Merriweather", Georgia, serif !important;
-  font-size: 1.35rem !important;
+  font-size: 1.3rem !important;
   font-weight: 700 !important;
   line-height: 1.15 !important;
   white-space: nowrap !important;

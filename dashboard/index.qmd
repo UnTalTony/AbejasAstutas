@@ -185,23 +185,26 @@ for i, (label, *_) in enumerate(metricas):
     ))
 
 fig_map.update_layout(
-    **L(margin=dict(l=0, r=0, t=0, b=0), height=260),
+    **L(margin=dict(l=0, r=0, t=0, b=0), height=300),
     updatemenus=[dict(
         type="buttons", buttons=buttons,
         direction="down", showactive=True, active=0,
         bgcolor="rgba(248,250,252,0.88)", bordercolor="#e2e8f0", borderwidth=1,
-        font=dict(size=13, family=FONT),
-        x=0.01, xanchor="left", y=0.97, yanchor="top",
-        pad=dict(b=5, t=5, r=10, l=10),
+        font=dict(size=12, family=FONT),
+        x=0.01, xanchor="left", y=1.0, yanchor="top",
+        pad=dict(b=4, t=4, r=8, l=8),
     )],
     geo=dict(
-        scope="north america", showland=True, landcolor="#f1f5f9",
+        scope="world", showland=True, landcolor="#f1f5f9",
         showocean=True, oceancolor="#dbeafe",
         showcoastlines=True, coastlinecolor="#94a3b8", coastlinewidth=0.5,
         showcountries=True, countrycolor="#475569", countrywidth=0.7,
         showsubunits=True, subunitcolor="#94a3b8", subunitwidth=0.4,
         showlakes=False, showframe=False, bgcolor=BG,
-        lataxis=dict(range=[13.5, 33.5]), lonaxis=dict(range=[-119, -85]),
+        projection=dict(type="mercator"),
+        lataxis=dict(range=[14.2, 32.8]),
+        lonaxis=dict(range=[-118, -86]),
+        domain=dict(x=[0, 1], y=[0, 1]),
     ),
 )
 fig_map
@@ -259,7 +262,7 @@ dict(icon="people", color="warning", value=f"{SUR_EXT_ABS/1e6:.1f} M")
 Para una familia que vive con lo mínimo para comer, pagar internet no está en la conversación. Pero el problema va más allá del dinero. En muchas comunidades no existen las torres de señal ni la fibra óptica necesarias para conectarse.
 :::
 
-![](Pobreza.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:500px; display:block; margin:0.6rem auto;"}
+![](Pobreza.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:500px; display:block; margin:0.5rem auto;"}
 
 *Imagen proporcionada por Jperez . Fuente: [Instagram — Jperez](https://www.instagram.com/p/DXfLOqzFhSp/?igsh=MThhc2d1M3NscWl2NQ==){style="font-size:0.78rem; color:#64748b;"}*
 
@@ -272,6 +275,20 @@ En Chiapas, el **74.4 %** de la población vive en pobreza. Sin internet, sus hi
 **III** · El Costo en el Aula
 
 ## Row
+
+### Column {width="20%"}
+
+```{python}
+#| content: valuebox
+#| title: "Titulados MS · Norte"
+dict(icon="patch-check", color="success", value=f"{NOR_TIT:.1f} %")
+```
+
+::: {.callout-important title="El dato que no puede ignorarse" icon=false}
+De cada 100 jóvenes que terminan el bachillerato en el suroeste, **menos de 6 obtienen su título oficial**. En el norte llegan a 17; nacional, 12 de cada 100.
+
+Sin título, la puerta a la universidad se cierra antes de tocarla.
+:::
 
 ### Column {width="60%"}
 
@@ -313,15 +330,21 @@ fig_sc.add_trace(go.Scatter(
     hovertemplate="<b>%{text}</b> — Estado prioritario<extra></extra>",
 ))
 fig_sc.update_layout(
-    **L(margin=dict(l=20, r=20, t=20, b=65), height=290),
+    **L(margin=dict(l=20, r=20, t=20, b=95), height=340),
     xaxis=dict(tickfont=dict(size=FSML), ticksuffix="%"),
     yaxis=dict(tickfont=dict(size=FSML), ticksuffix="%"),
     showlegend=True,
     legend=dict(
-        orientation="h", yanchor="top", y=-0.22,
-        xanchor="center", x=0.5, font=dict(size=FSML),
-        bgcolor="rgba(248,250,252,0.9)",
+        orientation="h", yanchor="top", y=-0.28,
+        xanchor="center", x=0.5,
+        font=dict(size=11, family=FONT),
+        bgcolor="rgba(248,250,252,0.95)",
         bordercolor="#e2e8f0", borderwidth=1, title_text="",
+        itemsizing="constant",
+        itemwidth=60,
+        tracegroupgap=30,
+        entrywidth=180,
+        entrywidthmode="pixels",
     ),
 )
 fig_sc
@@ -335,20 +358,6 @@ fig_sc
 dict(icon="x-circle", color="danger", value=f"{SUR_TIT:.1f} %")
 ```
 
-::: {.callout-important title="El dato que no puede ignorarse" icon=false}
-De cada 100 jóvenes que terminan el bachillerato en el suroeste, **menos de 6 obtienen su título oficial**. En el norte llegan a 17; nacional, 12 de cada 100.
-
-Sin título, la puerta a la universidad se cierra antes de tocarla.
-:::
-
-### Column {width="20%"}
-
-```{python}
-#| content: valuebox
-#| title: "Titulados MS · Norte"
-dict(icon="patch-check", color="success", value=f"{NOR_TIT:.1f} %")
-```
-
 ::: {.callout-note title="Sobre los datos" icon=false}
 **ENDUTIH 2024** (INEGI): 48,000+ hogares, representativa a nivel nacional.
 
@@ -356,6 +365,8 @@ dict(icon="patch-check", color="success", value=f"{NOR_TIT:.1f} %")
 
 **SEP 2023-24**: Media Superior únicamente. En comunidades rurales e indígenas la situación es más grave.
 :::
+
+![](egresados.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:500px; display:block; margin:0.5rem auto;"}
 
 ## Banner s4 {.section-break .s4 height="80px"}
 
@@ -410,11 +421,11 @@ fig_don = go.Figure(go.Pie(
     direction="clockwise", sort=False, showlegend=False,
 ))
 fig_don.update_layout(
-    **L(margin=dict(l=10, r=10, t=15, b=15), height=270),
+    **L(margin=dict(l=10, r=10, t=15, b=15), height=230),
     showlegend=False,
     annotations=[dict(
         text="<b>500 GB</b><br>sin internet", x=0.5, y=0.5,
-        font=dict(size=13, color="#1a1a2e"),
+        font=dict(size=12, color="#1a1a2e"),
         showarrow=False, xanchor="center", yanchor="middle",
     )],
 )
