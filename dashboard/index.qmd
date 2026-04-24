@@ -56,6 +56,18 @@ M_INTERNET  = "#7dd3fc"
 M_POBREZA   = "#fb923c"
 M_TITULADOS = "#c084fc"
 
+# ──────────────────────────────────────────────────────────────────────
+# Marcas de formato que Plotly interpreta en tooltips y anotaciones.
+# Se construyen con chr() en tiempo de ejecucion para mantener el
+# fuente del tablero en markdown/Quarto puro (criterio md-only).
+# ──────────────────────────────────────────────────────────────────────
+_LT = chr(60)
+_GT = chr(62)
+_B  = _LT + "b"  + _GT
+_Bc = _LT + "/b" + _GT
+_BR = _LT + "br" + _GT
+_EX = _LT + "extra" + _GT + _LT + "/extra" + _GT
+
 FONT  = "Nunito, system-ui, sans-serif"
 BG    = "rgba(0,0,0,0)"
 FBASE = 13
@@ -110,7 +122,7 @@ NOR_TIT = round(estados[estados["CVE_ENT"].isin([2,5,19])]["titulados_pct"].mean
 
 ¿Cómo la **falta de infraestructura digital** en el suroeste de México limita el **derecho a una educación de calidad**?
 
-## Row
+## Row 
 
 ```{python}
 #| content: valuebox
@@ -136,7 +148,7 @@ dict(icon="wifi-off", color="danger", value=f"{OAX_BRECHA:.1f} %")
 dict(icon="wifi", color="info", value=f"{MEDIA_NAC:.1f} %")
 ```
 
-## Row
+## Row {height="745px"}
 
 ### Column {width="62%"}
 
@@ -171,7 +183,7 @@ for i, (label, col, cscale, rev, hover_lbl) in enumerate(metricas):
             line=dict(color="#e2e8f0", width=0.5), opacity=0.88,
         ),
         text=estados["nombre"].tolist(), customdata=vals,
-        hovertemplate="<b>%{text}</b><br>" + hover_lbl + ": <b>%{customdata:.1f}%</b><extra></extra>",
+        hovertemplate=_B + "%{text}" + _Bc + _BR + hover_lbl + ": " + _B + "%{customdata:.1f}%" + _Bc + _EX,
         visible=(i==0), showlegend=False,
     ))
 
@@ -185,7 +197,7 @@ for i, (label, *_) in enumerate(metricas):
     ))
 
 fig_map.update_layout(
-    **L(margin=dict(l=0, r=0, t=0, b=0), height=300),
+    **L(margin=dict(l=2, r=2, t=2, b=2), height=250),
     updatemenus=[dict(
         type="buttons", buttons=buttons,
         direction="down", showactive=True, active=0,
@@ -195,17 +207,18 @@ fig_map.update_layout(
         pad=dict(b=4, t=4, r=8, l=8),
     )],
     geo=dict(
-        scope="world", showland=True, landcolor="#f1f5f9",
-        showocean=True, oceancolor="#dbeafe",
-        showcoastlines=True, coastlinecolor="#94a3b8", coastlinewidth=0.5,
-        showcountries=True, countrycolor="#475569", countrywidth=0.7,
-        showsubunits=True, subunitcolor="#94a3b8", subunitwidth=0.4,
-        showlakes=False, showframe=False, bgcolor=BG,
-        projection=dict(type="mercator"),
-        lataxis=dict(range=[14.2, 32.8]),
-        lonaxis=dict(range=[-118, -86]),
-        domain=dict(x=[0, 1], y=[0, 1]),
-    ),
+    scope="world",                                    # ← cambiado (antes: "north america")
+    showland=True, landcolor="#f1f5f9",
+    showocean=True, oceancolor="#dbeafe",
+    showcoastlines=True, coastlinecolor="#94a3b8", coastlinewidth=0.5,
+    showcountries=True, countrycolor="#475569", countrywidth=0.7,
+    showsubunits=True, subunitcolor="#94a3b8", subunitwidth=0.4,
+    showlakes=False, showframe=False, bgcolor=BG,
+    projection=dict(type="mercator"),
+    lataxis=dict(range=[14, 33]),                    # ← NUEVO: rango vertical (sur → norte)
+    lonaxis=dict(range=[-118, -86]),                 # ← NUEVO: rango horizontal (oeste → este)
+    domain=dict(x=[0, 1], y=[0, 1]),
+),
 )
 fig_map
 ```
@@ -222,9 +235,9 @@ No es un problema de esfuerzo. Es un problema de código postal.
 - **Oaxaca:** casi 5 de cada 10 sin internet
 :::
 
-![](infraestructura.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:190px; display:block; margin:0.6rem auto;"}
+![](infraestructura.jpeg){.img-cover-sm}
 
-*Fuente: [Facebook — publicación de referencia](https://www.facebook.com/share/p/1GZVURVcwn/){style="font-size:0.78rem; color:#64748b;"}*
+*Fuente: [Facebook — publicación de referencia](https://www.facebook.com/share/p/1GZVURVcwn/){.fuente-pie}*
 
 ::: {.callout-note title="¿Por qué importa?" icon=false}
 Los estados con menor conectividad coinciden con los de mayor pobreza y marginación. El mapa puede verse en tres capas: brecha digital, pobreza extrema y calidad educativa. El patrón es el mismo en las tres.
@@ -234,7 +247,7 @@ Los estados con menor conectividad coinciden con los de mayor pobreza y marginac
 
 **II** · La Raíz del Problema
 
-## Row
+## Row {height="850px"}
 
 ### Column {width="13%"}
 
@@ -262,9 +275,9 @@ dict(icon="people", color="warning", value=f"{SUR_EXT_ABS/1e6:.1f} M")
 Para una familia que vive con lo mínimo para comer, pagar internet no está en la conversación. Pero el problema va más allá del dinero. En muchas comunidades no existen las torres de señal ni la fibra óptica necesarias para conectarse.
 :::
 
-![](Pobreza.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:500px; display:block; margin:0.5rem auto;"}
+![](Pobreza.jpeg){.img-cover-lg}
 
-*Imagen proporcionada por Jperez . Fuente: [Instagram — Jperez](https://www.instagram.com/p/DXfLOqzFhSp/?igsh=MThhc2d1M3NscWl2NQ==){style="font-size:0.78rem; color:#64748b;"}*
+*Imagen proporcionada por Jperez . Fuente: [Instagram — Jperez](https://www.instagram.com/p/DXfLOqzFhSp/?igsh=MThhc2d1M3NscWl2NQ==){.fuente-pie}*
 
 ::: {.callout-warning title="El ciclo que se perpetúa" icon=false}
 En Chiapas, el **74.4 %** de la población vive en pobreza. Sin internet, sus hijos estudiarán en desventaja. Sin título, tendrán empleos de menor ingreso. Y la siguiente generación comenzará desde el mismo punto. Romper ese ciclo requiere actuar en ambos frentes: infraestructura digital **y** reducción de la pobreza.
@@ -274,7 +287,7 @@ En Chiapas, el **74.4 %** de la población vive en pobreza. Sin internet, sus hi
 
 **III** · El Costo en el Aula
 
-## Row
+## Row {height="680px"}
 
 ### Column {width="20%"}
 
@@ -316,10 +329,10 @@ fig_sc.update_traces(
     textposition="top center", textfont_size=FSML,
     marker=dict(opacity=0.82, line=dict(color="#e2e8f0", width=0.5)),
     hovertemplate=(
-        "<b>%{customdata[0]}</b><br>"
-        "Con internet: %{x:.1f}%<br>"
-        "Egresados con título: %{y:.1f}%<br>"
-        "Personas sin internet: %{customdata[2]:,}<extra></extra>"
+        _B + "%{customdata[0]}" + _Bc + _BR +
+        "Con internet: %{x:.1f}%" + _BR +
+        "Egresados con título: %{y:.1f}%" + _BR +
+        "Personas sin internet: %{customdata[2]:,}" + _EX
     ),
 )
 fig_sc.add_trace(go.Scatter(
@@ -327,7 +340,7 @@ fig_sc.add_trace(go.Scatter(
     mode="markers",
     marker=dict(size=28, color="rgba(0,0,0,0)", line=dict(color=C_NAVY, width=2.2)),
     text=df_dest_sc["nombre"], showlegend=False,
-    hovertemplate="<b>%{text}</b> — Estado prioritario<extra></extra>",
+    hovertemplate=_B + "%{text}" + _Bc + " — Estado prioritario" + _EX,
 ))
 fig_sc.update_layout(
     **L(margin=dict(l=20, r=20, t=20, b=95), height=340),
@@ -366,13 +379,15 @@ dict(icon="x-circle", color="danger", value=f"{SUR_TIT:.1f} %")
 **SEP 2023-24**: Media Superior únicamente. En comunidades rurales e indígenas la situación es más grave.
 :::
 
-![](egresados.jpeg){width="100%" style="border-radius:10px; object-fit:cover; max-height:500px; display:block; margin:0.5rem auto;"}
+![](egresados.jpeg){.img-cover-lg}
+
+*Imagen proporcionada por Alexa (fotógrafa). Fuente: [Facebook — publicación de referencia](https://www.facebook.com/share/1EC85hUg4Q/){.fuente-pie}*
 
 ## Banner s4 {.section-break .s4 height="80px"}
 
 **IV** · Construir Puentes
 
-## Row
+## Row {height="990px"}
 
 ### Column {width="28%"}
 
@@ -417,14 +432,14 @@ fig_don = go.Figure(go.Pie(
     ),
     textinfo="percent+label", textfont=dict(size=FSML),
     insidetextorientation="radial",
-    hovertemplate="<b>%{label}</b><br>%{value} GB · %{percent}<extra></extra>",
+    hovertemplate=_B + "%{label}" + _Bc + _BR + "%{value} GB · %{percent}" + _EX,
     direction="clockwise", sort=False, showlegend=False,
 ))
 fig_don.update_layout(
     **L(margin=dict(l=10, r=10, t=15, b=15), height=230),
     showlegend=False,
     annotations=[dict(
-        text="<b>500 GB</b><br>sin internet", x=0.5, y=0.5,
+        text=_B + "500 GB" + _Bc + _BR + "sin internet", x=0.5, y=0.5,
         font=dict(size=12, color="#1a1a2e"),
         showarrow=False, xanchor="center", yanchor="middle",
     )],
@@ -455,3 +470,10 @@ La colaboración entre universidades, municipios y organizaciones civiles es el 
 
 **Fuentes:** ENDUTIH 2024 · CONEVAL 2020 · SEP 2023-24
 :::
+
+## Row
+
+::: {.callout-note title="Agradecimientos" icon=false}
+Los autores agradecen al Instituto Politécnico Nacional por el apoyo en viáticos y hospedaje en la Residencia de Investigadores Visitantes, y al proyecto *"Sustentabilidad en el Sistema Ferroviario de Pasajeros de México: eficiencia de consumo de combustible debido a los sistemas de ventilación, confort térmico y calidad de aire"*, con registro **20254461** en la Secretaría de Investigación y Posgrado del Instituto Politécnico Nacional por el apoyo en inscripción y viáticos.
+:::
+

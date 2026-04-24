@@ -166,13 +166,33 @@ body, .dashboard-body, .quarto-dashboard {
   color: #94a3b8 !important;
   line-height: 1.4 !important;
 }
+/* Enlace de pie de foto */
+.fuente-pie {
+  font-size: 0.78rem !important;
+  color: #64748b !important;
+}
+
+/* ── Imágenes de contenido ───────────────────────────────────────────── */
+/* Estilos base compartidos */
+.img-cover-sm,
+.img-cover-lg {
+  border-radius: 10px !important;
+  object-fit: cover !important;
+  display: block !important;
+  margin: 0.5rem auto !important;
+  width: 100% !important;
+}
+/* Variante pequeña — Sección I */
+.img-cover-sm { max-height: 190px !important; }
+/* Variante grande — Secciones II y III */
+.img-cover-lg { max-height: 500px !important; }
 /* ── Value boxes — se estiran para llenar la altura de su columna ───── */
 .bslib-value-box {
   border-radius: 10px !important;
   box-shadow: 0 3px 10px rgba(0,0,0,0.12) !important;
   border: none !important;
   min-height: 85px !important;
-  height: 100% !important;
+  height: 80% !important;
   flex: 1 1 auto !important;
   margin-bottom: 0.4rem !important;
 }
@@ -253,4 +273,8 @@ div[class*="cell-output"]:has(.bslib-value-box) {
   .bslib-value-box .value-box-value { font-size: 1.05rem !important; }
   .bslib-value-box .value-box-title { font-size: 0.58rem !important; }
   .card-header { font-size: 0.72rem !important; }
+}
+/* Columnas de la Sección III — contenido alineado arriba */
+.quarto-dashboard .bslib-grid-item > div {
+  justify-content: flex-start !important;
 }
